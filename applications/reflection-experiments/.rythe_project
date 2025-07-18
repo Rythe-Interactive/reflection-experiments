@@ -1,0 +1,2 @@
+local project = {dependencies = {"public rythe/rythe-standard-library"}}
+return project
