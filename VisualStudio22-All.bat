@@ -1,0 +1,1 @@
+rythe-build-system\premake5 --file=rythe-build-system/premake5.lua vs2022
