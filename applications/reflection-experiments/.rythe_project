@@ -1,2 +1,5 @@
-local project = {dependencies = {"public rythe/rythe-standard-library"}}
+local project = {
+    additional_types = { "test" },
+    dependencies = {"public rythe/rythe-standard-library"}
+}
 return project
