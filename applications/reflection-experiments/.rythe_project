@@ -1,5 +1,6 @@
 local project = {
     additional_types = { "test" },
     dependencies = {"public rythe/rythe-standard-library"}
+    -- additional_link_targets = { "libclang.lib" }
 }
 return project
