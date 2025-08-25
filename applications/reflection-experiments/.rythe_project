@@ -1,6 +1,17 @@
+local fs = dofile("filesystem.lua")
+
 local project = {
     additional_types = { "test" },
     dependencies = { "public rythe/rythe-standard-library", "private third_party/clang-c:header-only" },
-    additional_link_targets = { "libclang" }
+    additional_link_targets = { "libclang" },
 }
+
+function project.init(proj, context)
+    local targetDir = fs.sanitize(fs.parentPath(_MAIN_SCRIPT_DIR) .. "/build/" .. _ACTION) .. fs.getPathSeperator()
+    local srcDir = fs.sanitize(fs.parentPath(_MAIN_SCRIPT_DIR) .. "/" .. proj.location .. "/src/test.hpp")
+    proj.post_build = { "xcopy \"" .. srcDir .. "\" \"" .. targetDir .. "\" /i /r /y /s /c" }
+
+    return proj
+end
+
 return project
