@@ -16,7 +16,7 @@ int main() {
         std::cerr << "Unable to parse translation unit. Quitting.\n";
         return 0;
     }
-    CXCursor cursor = clang_getTranslationUnitCursor(unit); //Obtain a cursor at the root of the translation unit
+    //CXCursor cursor = clang_getTranslationUnitCursor(unit); //Obtain a cursor at the root of the translation unit
  
     
     return 0;
