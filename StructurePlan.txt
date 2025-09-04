@@ -6,6 +6,11 @@ Have a cash system which will partially generate things
 
 Having as multiple .cpp and .hpp files does feel significantly better performance wise as it would allow to not recompile everything when something is changed and make it modular. In addition we would be able to remove need for registry if generated.hpp file would hold a reference to metadata. The downside is having a lot of files. BUT THREAAADING CAN BE IMPLEMENTED TO MAKE IT PARALLEL.
 
+Add supported list of attributes to our precompiler step, which will give warning based on if it is in there already or not.
+
+LLVM + clang; consider parsing AST myself vs let clang parse it; 
+
+
 2 During compilation populate unordered map with type - members
 
 Different types and info we need to keep track of:
@@ -16,6 +21,7 @@ Different types and info we need to keep track of:
 	4 Functions: -//-, const, static, virtual and co, pointer to function, 
 	5 Template instances: our concept thing, member functions and variables, allignment, size, name with parameters, 
 	6 Enums: underlying type, scoped?, values
+	7 unions?
 
 	
 If we implement inheritance reflected_member - we will incur 8*virtual_func_num hidden bytes

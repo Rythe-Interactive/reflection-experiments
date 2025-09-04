@@ -9,8 +9,7 @@ namespace rythe::reflection_containers {
         rsl::hashed_string name;
         rsl::dynamic_string current_namespace;
         reflection_properties::acess_modifier access_modifier;
-        rsl::dynamic_string attributes[];
-
+        
         bool is_static;
         bool is_const;
 
@@ -22,6 +21,8 @@ namespace rythe::reflection_containers {
         uint16_t alignment;
 
         reflection_id type_id;
+
+        rsl::dynamic_array<rsl::dynamic_string> attributes;
         
         template <typename T>
         reflected_variable()
