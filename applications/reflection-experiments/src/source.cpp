@@ -1,14 +1,14 @@
 #include <unordered_set>
 
 #include "rsl/containers"
-#include "argh.h"
+#include "rsl/cli"
 
 #include "reflection_parsers/AST_source_parser.h"
 
 
 int main(int, char* argv[]) {
 
-    argh::parser cmdl(argv);
+    rsl::cli_parser cmdl(argv);
 
     std::unordered_set<std::string> folders;
     
