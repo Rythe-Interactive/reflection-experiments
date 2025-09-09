@@ -1,14 +1,14 @@
 #include "AST_source_parser.h"
 
-AST_source_parser::AST_source_parser() {
+reflection_parsers::AST_source_parser::AST_source_parser() {
     index = clang_createIndex(0, 0);
 }
 
-AST_source_parser::~AST_source_parser() {
+reflection_parsers::AST_source_parser::~AST_source_parser() {
     
 }
 
-void AST_source_parser::parse_source_folders(const std::unordered_set<std::string> &folders) {
+void reflection_parsers::AST_source_parser::parse_source_folders(const std::unordered_set<std::string> &folders) {
     index = clang_createIndex(0, 0);
 
     for (auto folder : folders) {
@@ -26,7 +26,7 @@ void AST_source_parser::parse_source_folders(const std::unordered_set<std::strin
     }
 }
 
-void AST_source_parser::AST_parse_file(const std::string filePath, CXIndex index) {
+void reflection_parsers::AST_source_parser::AST_parse_file(const std::string filePath, CXIndex index) {
     
     CXTranslationUnit unit = clang_parseTranslationUnit(
           index,
@@ -49,7 +49,7 @@ void AST_source_parser::AST_parse_file(const std::string filePath, CXIndex index
       );
 }
 
-CXChildVisitResult AST_source_parser::visitor(
+CXChildVisitResult reflection_parsers::AST_source_parser::visitor(
     CXCursor current_cursor,
     CXCursor parent,
     CXClientData client_data) {
@@ -61,9 +61,16 @@ CXChildVisitResult AST_source_parser::visitor(
     if (strcmp(char_display_name, "")) {
         for (int i = 0; i < data->depth; i++) std::cout << "  ";
         std::cout << "Visiting element: " << char_display_name << "\n";
-
+        
         if (parent.kind == CXCursor_FunctionDecl) {}
-    
+        
+        if (current_cursor.kind == CXCursor_FieldDecl) {
+            
+
+            
+            
+        }
+        
         clang_disposeString(current_display_name);
         visitor_context child{.self = data->self, .depth = data->depth + 1 };
         
@@ -75,13 +82,65 @@ CXChildVisitResult AST_source_parser::visitor(
     return CXChildVisit_Continue;
 }
 
-CXChildVisitResult AST_source_parser::visitor_callback_wrapper(
+CXChildVisitResult reflection_parsers::AST_source_parser::visitor_callback_wrapper(
     CXCursor cursor,
     CXCursor parent,
     CXClientData client_data) {
     
-    auto self = static_cast<AST_source_parser*>(client_data);
+    auto self = static_cast<reflection_parsers::AST_source_parser*>(client_data);
     return self->visitor(cursor, parent, client_data);
+}
+
+rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_parser::extract_variable(CXCursor cursor) {
+    
+    CXString fieldName = clang_getCursorSpelling(cursor);
+
+    CXCursor parent = clang_getCursorSemanticParent(cursor);
+    CXString parentName = clang_getCursorSpelling(parent);
+    
+    reflection_properties::acess_modifier access;
+    switch (clang_getCXXAccessSpecifier(cursor)) {
+    case CX_CXXPublic:
+        access = reflection_properties::acess_modifier::public_access;
+        break;
+    case CX_CXXProtected:
+        access = reflection_properties::acess_modifier::protected_access;
+        break;
+    case CX_CXXPrivate:
+        access = reflection_properties::acess_modifier::private_access;
+        break;
+    case CX_CXXInvalidAccessSpecifier:
+        // Debug something bad
+        break;
+    default:
+        break;
+    }
+    
+    CXType type = clang_getCursorType(cursor);
+    CXString type_spelling = clang_getTypeSpelling(type);
+
+    bool is_const = clang_isConstQualifiedType(type);
+
+    // Not sure how to do that yet
+    bool is_static = true;
+
+    if (type.kind == CXType_ConstantArray) {
+        bool is_array = true;
+        int array_size = static_cast<int>(clang_getArraySize(type));
+    } else {
+        bool is_array = false;
+        int array_size = 0;
+    }
+
+    size_t size = clang_Type_getSizeOf(type);
+    size_t align = clang_Type_getAlignOf(type);
+
+    int offset = (int)clang_Cursor_getOffsetOfField(cursor);
+
+    return rythe::reflection_containers::reflected_variable<int>(
+        );
+
+    
 }
 
 
