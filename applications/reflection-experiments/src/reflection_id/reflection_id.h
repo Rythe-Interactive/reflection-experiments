@@ -8,6 +8,6 @@ public:
     rsl::dynamic_string type;
 
     rsl::dynamic_string get_type() const {
-        return type.data;
+        return type;
     }
 };

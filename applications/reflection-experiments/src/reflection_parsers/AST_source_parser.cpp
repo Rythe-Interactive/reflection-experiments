@@ -66,7 +66,7 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor(
         
         if (current_cursor.kind == CXCursor_FieldDecl) {
             
-
+        
             
             
         }
@@ -93,7 +93,7 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor_callback_wrapp
 
 rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_parser::extract_variable(CXCursor cursor) {
     
-    CXString fieldName = clang_getCursorSpelling(cursor);
+    CXString field_name = clang_getCursorSpelling(cursor);
 
     CXCursor parent = clang_getCursorSemanticParent(cursor);
     CXString parentName = clang_getCursorSpelling(parent);
@@ -123,13 +123,13 @@ rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_
 
     // Not sure how to do that yet
     bool is_static = true;
-
+    
+    bool is_array = false;
+    int array_size = 0;
+    
     if (type.kind == CXType_ConstantArray) {
-        bool is_array = true;
-        int array_size = static_cast<int>(clang_getArraySize(type));
-    } else {
-        bool is_array = false;
-        int array_size = 0;
+        is_array = true;
+        array_size = static_cast<int>(clang_getArraySize(type));
     }
 
     size_t size = clang_Type_getSizeOf(type);
@@ -137,11 +137,32 @@ rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_
 
     int offset = (int)clang_Cursor_getOffsetOfField(cursor);
 
-    return rythe::reflection_containers::reflected_variable<int>(
-        );
+    rsl::dynamic_array<rsl::dynamic_string> attributes;
 
+    const char* field_cstr = clang_getCString(field_name);
+    const char* parent_cstr = clang_getCString(parentName);
     
+    return rythe::reflection_containers::reflected_variable<int>(
+        rsl::hashed_string::from_buffer(
+            field_cstr,
+            strlen(clang_getCString(field_name))),
+        rsl::dynamic_string::from_buffer(
+            parent_cstr,
+            strlen(clang_getCString(parentName))),
+        access,
+        is_static,
+        is_const,
+        is_array,
+        array_size,
+        offset,
+        reflection_id(
+            rsl::dynamic_string::from_buffer(
+                field_cstr,
+                strlen(clang_getCString(field_name)))),
+        attributes);
 }
+
+
 
 
 

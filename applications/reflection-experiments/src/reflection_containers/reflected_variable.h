@@ -24,7 +24,8 @@ namespace rythe::reflection_containers {
 
         rsl::dynamic_array<rsl::dynamic_string> attributes;
         
-        reflected_variable(rsl::hashed_string name,
+        reflected_variable(
+            rsl::hashed_string name,
             rsl::dynamic_string current_namespace,
             reflection_properties::acess_modifier access_modifier,
             bool is_static,
@@ -37,10 +38,31 @@ namespace rythe::reflection_containers {
             reflection_id type_id,
             rsl::dynamic_array<rsl::dynamic_string> attributes);
 
-        template <typename T>
-            reflected_variable()
-              : size(sizeof(T)), alignment(alignof(T)){}
 
+        template <typename T>
+        reflected_variable(
+            rsl::hashed_string name,
+            rsl::dynamic_string current_namespace,
+            reflection_properties::acess_modifier access_modifier,
+            bool is_static,
+            bool is_const,
+            bool is_array,
+            int array_size,
+            size_t offset,
+            reflection_id type_id,
+            rsl::dynamic_array<rsl::dynamic_string> attributes)
+        : name(name),
+        current_namespace(current_namespace),
+        access_modifier(access_modifier),
+        is_static(is_static),
+        is_const(is_const),
+        is_array(is_array),
+        array_size(array_size),
+        offset(offset),
+        size(sizeof(T)),                 
+        alignment(alignof(T)),           
+        type_id(type_id),
+        attributes(attributes){}
 
         void* get_value_ptr(void* obj) {
             return reinterpret_cast<char*>(obj) + offset;
