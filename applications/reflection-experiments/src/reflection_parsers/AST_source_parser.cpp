@@ -13,11 +13,8 @@ reflection_parsers::AST_source_parser::~AST_source_parser() {
 void reflection_parsers::AST_source_parser::parse_source_folders(const std::unordered_set<std::string> &folders) {
     index = clang_createIndex(0, 0);
 
-    for (auto folder : folders) {
-        
-        rsl::dynamic_string string = rsl::dynamic_string::from_buffer(folder.c_str(), folder.size());
-        
-        for (const auto& entry : std::filesystem::recursive_directory_iterator(string.data())) {
+    for (auto folder : folders) {        
+        for (const auto& entry : std::filesystem::recursive_directory_iterator(folder)) {
             if (!entry.is_regular_file()) continue;
             
             std::filesystem::path path = entry.path();

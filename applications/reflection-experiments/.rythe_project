@@ -7,10 +7,8 @@ local project = {
 }
 
 function project.init(proj, context)
-    local targetDir = fs.sanitize(fs.parentPath(_MAIN_SCRIPT_DIR) .. "/build/" .. _ACTION) .. fs.getPathSeperator()
-    local srcDir = fs.sanitize(fs.parentPath(_MAIN_SCRIPT_DIR) .. "/" .. proj.location .. "/src/test.hpp")
-    proj.post_build = { "xcopy \"" .. srcDir .. "\" \"" .. targetDir .. "\" /i /r /y /s /c" }
-
+    local srcDir = fs.sanitize(context.getProjectDir() .. "/src/target/")
+    proj.debug_args = { "--fpath=\"" .. srcDir .. "\"" }
     return proj
 end
 
