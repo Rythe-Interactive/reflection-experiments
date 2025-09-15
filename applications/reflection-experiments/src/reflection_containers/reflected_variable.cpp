@@ -1,6 +1,6 @@
 #include "reflected_variable.h"
 
-rythe::reflection_containers::reflected_variable(
+rythe::reflection_containers::reflected_variable::reflected_variable(
     rsl::hashed_string name,
     rsl::dynamic_string current_namespace,
     reflection_properties::acess_modifier access_modifier,
@@ -12,10 +12,19 @@ rythe::reflection_containers::reflected_variable(
     size_t size,
     uint16_t alignment,
     reflection_id type_id,
-    rsl::dynamic_array<rsl::dynamic_string> attributes) {
-
-    name = name;
-    
+    rsl::dynamic_array<rsl::dynamic_string> attributes) :
+    name(name),
+    current_namespace(current_namespace),
+    access_modifier(access_modifier),
+    is_static(is_static),
+    is_const(is_const),
+    is_array(is_array),
+    array_size(array_size),
+    offset(offset),
+    size(size),
+    alignment(alignment),
+    type_id(type_id),
+    attributes(attributes){
     
 }
 

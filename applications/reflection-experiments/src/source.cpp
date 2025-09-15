@@ -19,8 +19,8 @@ int main(int, char* argv[]) {
     }
     
     std::cout << "Here is the parameter: " << string << std::endl;
-    
-    AST_source_parser parser = AST_source_parser();
+
+    reflection_parsers::AST_source_parser parser = reflection_parsers::AST_source_parser();
     
     parser.parse_source_folders(folders);    
     

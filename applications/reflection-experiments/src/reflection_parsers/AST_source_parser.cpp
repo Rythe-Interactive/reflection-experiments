@@ -21,7 +21,7 @@ void reflection_parsers::AST_source_parser::parse_source_folders(const std::unor
             std::filesystem::path path = entry.path();
             if (path.extension() == ".hpp" || path.extension() == ".h") {
                 AST_parse_file(path.string().c_str(), index);
-                }
+            }
         }
     }
 }
@@ -65,9 +65,8 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor(
         if (parent.kind == CXCursor_FunctionDecl) {}
         
         if (current_cursor.kind == CXCursor_FieldDecl) {
-            
-        
-            
+          rythe::reflection_containers::reflected_variable reflected_variable = extract_variable(current_cursor);
+
             
         }
         
@@ -91,14 +90,14 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor_callback_wrapp
     return self->visitor(cursor, parent, client_data);
 }
 
-rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_parser::extract_variable(CXCursor cursor) {
+ rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_parser::extract_variable(CXCursor cursor) {
     
     CXString field_name = clang_getCursorSpelling(cursor);
 
     CXCursor parent = clang_getCursorSemanticParent(cursor);
     CXString parentName = clang_getCursorSpelling(parent);
     
-    reflection_properties::acess_modifier access;
+    reflection_properties::acess_modifier access = {};
     switch (clang_getCXXAccessSpecifier(cursor)) {
     case CX_CXXPublic:
         access = reflection_properties::acess_modifier::public_access;
@@ -117,7 +116,7 @@ rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_
     }
     
     CXType type = clang_getCursorType(cursor);
-    CXString type_spelling = clang_getTypeSpelling(type);
+
 
     bool is_const = clang_isConstQualifiedType(type);
 
@@ -142,19 +141,19 @@ rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_
     const char* field_cstr = clang_getCString(field_name);
     const char* parent_cstr = clang_getCString(parentName);
     
-    return rythe::reflection_containers::reflected_variable<int>(
-        rsl::hashed_string::from_buffer(
-            field_cstr,
-            strlen(clang_getCString(field_name))),
-        rsl::dynamic_string::from_buffer(
-            parent_cstr,
-            strlen(clang_getCString(parentName))),
+    return rythe::reflection_containers::reflected_variable(
+        rsl::hashed_string::from_string_length(
+            field_cstr),
+        rsl::dynamic_string::from_string_length(
+            parent_cstr),
         access,
         is_static,
         is_const,
         is_array,
         array_size,
         offset,
+        size,
+        align,
         reflection_id(
             rsl::dynamic_string::from_buffer(
                 field_cstr,
