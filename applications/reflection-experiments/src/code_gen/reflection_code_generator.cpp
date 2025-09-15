@@ -1,9 +1,19 @@
 #include "reflection_code_generator.h"
 
-/*
+#include <fstream>
+#include <iostream>
+
+reflection_code_generator::reflection_code_generator() {
+    
+}
+
+reflection_code_generator::~reflection_code_generator() {
+    
+}
+
 rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflection_containers::reflected_variable parsed_variable, int indent = 4) {
 
-    rsl::dynamic_string pad = rsl::dynamic_string::from_buffer("    ");
+    std::string pad(indent, ' ');
     std::ostringstream out;
 
     out << "rythe::reflection_containers::reflected_variable(\n";
@@ -12,9 +22,9 @@ rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflecti
     out << pad << "rsl::hashed_string::from_buffer(" 
         << name << ", " << (name ? std::strlen(name) : 0) << "),\n";
 
-    const char* ns = parsed_variable.get_namespace().data();
+    const char* name_space = parsed_variable.get_namespace().data();
     out << pad << "rsl::dynamic_string::from_buffer(" 
-        << name << ", " << (ns ? std::strlen(ns) : 0) << "),\n";
+        << name << ", " << (name_space ? std::strlen(name_space) : 0) << "),\n";
     
     switch (parsed_variable.get_access_modifier()) {
         case reflection_properties::acess_modifier::public_access:
@@ -40,19 +50,39 @@ rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflecti
     out << pad << "reflection_id(rsl::dynamic_string::from_buffer("
         << type_str << ", " << (type_str ? std::strlen(type_str) : 0) << ")),\n";
     
-    const auto& attrs = parsed_variable.get_attributes();
+    const auto& attributes = parsed_variable.get_attributes();
     out << pad << "rsl::dynamic_array<rsl::dynamic_string>{";
-    if (!attrs.empty()) out << "\n";
-    for (size_t i = 0; i < attrs.size(); ++i) {
-        const char* a = attrs[i].data();
+    if (!attributes.empty()) out << "\n";
+    /*for (int i = 0; i < attributes.size(); ++i) {
+        const char* attribute = attributes[i].data();
         out << pad << "    rsl::dynamic_string::from_buffer(" 
-            << a << ", " << (a ? std::strlen(a) : 0) << ")";
-        if (i + 1 < attrs.size()) out << ",";
+            << attribute << ", " << (attribute ? attributes.size() : 0) << ")";
+        if (i + 1 < attributes) out << ",";
         out << "\n";
-    }
-    if (!attrs.empty()) out << pad;
+    }*/
+    if (!attributes.empty()) out << pad;
     out << "}\n";
 
     out << "    )";
-    return ;
-}*/
+    
+    std::string string = out.str();
+    return rsl::dynamic_string::from_buffer(string.c_str(), string.size());
+}
+
+
+void reflection_code_generator::generate_reflected_variable_file(
+    const rythe::reflection_containers::reflected_variable& parsed_variable,
+    const std::string& outFile)
+{
+    std::cout << "reflection_code_generator::generate_reflected_variable_file\n";
+    std::ofstream file(outFile);
+    if (!file.is_open()) {
+        std::cout << "Could not open file " << outFile << " for writing.\n";
+    }
+
+    file << "#include \"reflected_variable.hpp\"\n";
+    file << "using namespace rythe::reflection_containers;\n\n";
+    file << "void generate_variable(rythe::reflection_containers::reflected_variable parsed_variable) {\n";
+    file << "    auto var = " << generate_variable(parsed_variable, 4).data() << ";\n";
+    file << "}\n";
+}

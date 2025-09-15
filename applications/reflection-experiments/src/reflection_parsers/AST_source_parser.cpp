@@ -2,6 +2,8 @@
 
 reflection_parsers::AST_source_parser::AST_source_parser() {
     index = clang_createIndex(0, 0);
+
+    code_generator = reflection_code_generator();
 }
 
 reflection_parsers::AST_source_parser::~AST_source_parser() {
@@ -58,18 +60,19 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor(
 
     CXString current_display_name = clang_getCursorDisplayName(current_cursor);
     const char* char_display_name = clang_getCString(current_display_name);
-    if (strcmp(char_display_name, "")) {
+    if (char_display_name && char_display_name[0] != '\0') {
         for (int i = 0; i < data->depth; i++) std::cout << "  ";
         std::cout << "Visiting element: " << char_display_name << "\n";
         
-        if (parent.kind == CXCursor_FunctionDecl) {}
-        
-        if (current_cursor.kind == CXCursor_FieldDecl) {
+        if (clang_getCursorKind(parent) == CXCursor_FunctionDecl) {}
+        std::cout << clang_getCursorKind(current_cursor) << std::endl;
+        std::cout << (CXCursor_FieldDecl == clang_getCursorKind(current_cursor)) << "lalalalal "<< std::endl;
+        if (CXCursor_FieldDecl == clang_getCursorKind(current_cursor)) {
           rythe::reflection_containers::reflected_variable reflected_variable = extract_variable(current_cursor);
-
-            
+            code_generator.generate_reflected_variable_file(reflected_variable, "reflected_variable.generated");
+            std::cout << "indeed true" << std::endl;
         }
-        
+        std::cout << (CXCursor_FieldDecl == clang_getCursorKind(current_cursor)) << "lalalalal "<< std::endl;
         clang_disposeString(current_display_name);
         visitor_context child{.self = data->self, .depth = data->depth + 1 };
         
@@ -136,7 +139,7 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor_callback_wrapp
 
     int offset = (int)clang_Cursor_getOffsetOfField(cursor);
 
-    rsl::dynamic_array<rsl::dynamic_string> attributes;
+    rsl::dynamic_array<rsl::dynamic_string> attributes = {};
 
     const char* field_cstr = clang_getCString(field_name);
     const char* parent_cstr = clang_getCString(parentName);

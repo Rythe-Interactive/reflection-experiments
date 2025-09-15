@@ -6,6 +6,7 @@
 #include "../code_gen/reflection_code_generator.h"
 #include "../reflection_containers/reflected_variable.h"
 #include "../reflection_properties/access_modifier.h"
+#include "../code_gen/reflection_code_generator.h"
 
 #include "rsl/containers"
 
@@ -30,6 +31,7 @@ namespace reflection_parsers {
         
     private:
 
+        reflection_code_generator code_generator;
         CXIndex index;
         
         CXChildVisitResult visitor(
