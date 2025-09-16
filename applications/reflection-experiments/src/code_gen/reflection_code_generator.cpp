@@ -19,8 +19,7 @@ rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflecti
     out << "rythe::reflection_containers::reflected_variable(\n";
 
     const char* name = parsed_variable.get_name().data();
-    out << pad << "rsl::hashed_string::from_buffer(" 
-        << name << ", " << (name ? std::strlen(name) : 0) << "),\n";
+    out << pad << "\"" << name << "\"_hs,\n";
 
     const char* name_space = parsed_variable.get_namespace().data();
     out << pad << "\"" << name_space << "\"_ds,\n";
