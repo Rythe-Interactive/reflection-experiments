@@ -23,8 +23,7 @@ rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflecti
         << name << ", " << (name ? std::strlen(name) : 0) << "),\n";
 
     const char* name_space = parsed_variable.get_namespace().data();
-    out << pad << "rsl::dynamic_string::from_buffer(" 
-        << name << ", " << (name_space ? std::strlen(name_space) : 0) << "),\n";
+    out << pad << "\"" << name_space << "\"_ds,\n";
     
     switch (parsed_variable.get_access_modifier()) {
         case reflection_properties::acess_modifier::public_access:
