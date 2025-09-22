@@ -95,7 +95,7 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor_callback_wrapp
     CXString field_name = clang_getCursorSpelling(cursor);
 
     CXCursor parent = clang_getCursorSemanticParent(cursor);
-    CXString parentName = clang_getCursorSpelling(parent);
+    CXString parent_name = clang_getCursorSpelling(parent);
     
     reflection_properties::acess_modifier access = {};
     switch (clang_getCXXAccessSpecifier(cursor)) {
@@ -116,8 +116,7 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor_callback_wrapp
     }
     
     CXType type = clang_getCursorType(cursor);
-
-
+    
     bool is_const = clang_isConstQualifiedType(type);
 
     // Not sure how to do that yet
@@ -139,13 +138,20 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor_callback_wrapp
     rsl::dynamic_array<rsl::dynamic_string> attributes = {};
 
     const char* field_cstr = clang_getCString(field_name);
-    const char* parent_cstr = clang_getCString(parentName);
+    const char* parent_cstr = clang_getCString(parent_name);
+
+    CXType cursor_type = clang_getCursorType(cursor);
+    CXString type_spelling = clang_getTypeSpelling(cursor_type);
+    const char* type_cstr = clang_getCString(type_spelling);
+
+    clang_disposeString(type_spelling);
+    clang_disposeString(field_name);
+    clang_disposeString(parent_name);
+
     
     return rythe::reflection_containers::reflected_variable(
-        rsl::hashed_string::from_string_length(
-            field_cstr),
-        rsl::dynamic_string::from_string_length(
-            parent_cstr),
+        rsl::hashed_string::from_string_length(field_cstr),
+        rsl::dynamic_string::from_string_length(parent_cstr),
         access,
         is_static,
         is_const,
@@ -154,10 +160,7 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor_callback_wrapp
         offset,
         size,
         align,
-        reflection_id(
-            rsl::dynamic_string::from_buffer(
-                field_cstr,
-                strlen(clang_getCString(field_name)))),
+        reflection_id(rsl::dynamic_string::from_string_length(type_cstr)),
         attributes);
 }
 

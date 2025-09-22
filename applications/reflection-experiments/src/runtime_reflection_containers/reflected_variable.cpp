@@ -28,6 +28,10 @@ rythe::reflection_containers::reflected_variable::reflected_variable(
     
 }
 
+void* rythe::reflection_containers::reflected_variable::get_value_ptr(void* obj) {
+            return reinterpret_cast<char*>(obj) + offset;
+}
+
 const rsl::hashed_string& rythe::reflection_containers::reflected_variable::get_name() const {
     return this->name;
 }
@@ -75,8 +79,6 @@ const reflection_id& rythe::reflection_containers::reflected_variable::get_type_
 const rsl::dynamic_array<rsl::dynamic_string>& rythe::reflection_containers::reflected_variable::get_attributes() const {
     return this->attributes;
 }
-
-// ---------------- Setters ----------------
 
 void rythe::reflection_containers::reflected_variable::set_name(const rsl::hashed_string& name) {
     this->name = name;

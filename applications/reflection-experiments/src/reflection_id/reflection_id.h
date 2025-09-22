@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+
 #include "rsl/impl/containers/string.hpp"
 
 struct reflection_id {
@@ -8,6 +10,8 @@ public:
     rsl::dynamic_string type;
 
     rsl::dynamic_string get_type() const {
+        
+        std::cout << type.data() << std::endl;
         return type;
     }
 };

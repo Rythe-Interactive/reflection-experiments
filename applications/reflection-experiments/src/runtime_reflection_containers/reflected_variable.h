@@ -64,9 +64,7 @@ namespace rythe::reflection_containers {
         type_id(type_id),
         attributes(attributes){}
 
-        void* get_value_ptr(void* obj) {
-            return reinterpret_cast<char*>(obj) + offset;
-        }
+        void* get_value_ptr(void* obj);
 
         const rsl::hashed_string& get_name() const;
         const rsl::dynamic_string& get_namespace() const;
