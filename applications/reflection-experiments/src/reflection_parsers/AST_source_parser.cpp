@@ -1,5 +1,8 @@
 #include "AST_source_parser.h"
 
+#include "../runtime_reflection_containers/reflected_function.h"
+#include "../runtime_reflection_containers/reflected_variable.h"
+
 reflection_parsers::AST_source_parser::AST_source_parser() {
     index = clang_createIndex(0, 0);
 

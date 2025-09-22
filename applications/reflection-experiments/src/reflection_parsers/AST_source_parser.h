@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <unordered_set>
 #include "../code_gen/reflection_code_generator.h"
-#include "../reflection_containers/reflected_variable.h"
+#include "../runtime_reflection_containers/reflected_variable.h"
 #include "../reflection_properties/access_modifier.h"
 #include "../code_gen/reflection_code_generator.h"
 

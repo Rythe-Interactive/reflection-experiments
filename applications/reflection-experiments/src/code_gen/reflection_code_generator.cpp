@@ -3,6 +3,9 @@
 #include <fstream>
 #include <iostream>
 
+#include "../runtime_reflection_containers/reflected_function.h"
+#include "../runtime_reflection_containers/reflected_variable.h"
+
 reflection_code_generator::reflection_code_generator() {
     
 }
