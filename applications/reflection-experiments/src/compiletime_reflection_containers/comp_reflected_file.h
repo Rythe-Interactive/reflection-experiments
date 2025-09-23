@@ -8,12 +8,15 @@ class comp_reflected_file : public comp_reflected_variable_container,
                             public comp_reflected_element {
 public:
     rsl::dynamic_string name;
-    comp_reflected_file(const rsl::dynamic_string &usr_id);
-    ~comp_reflected_file();
+    comp_reflected_file(const rsl::dynamic_string source_location);
+    ~comp_reflected_file() override;
 
     void addVariableToFile(const rsl::dynamic_string &parent_usr_id, comp_reflected_variable variable);
 
-private:
-    std::map<rsl::dynamic_string, comp_reflected_element> all_elements;
+    comp_reflected_variable_container* asVariableContainer() override {return this;}
     
+private:
+    std::map<rsl::dynamic_string, std::unique_ptr<comp_reflected_element>> all_elements;
+
+    rsl::dynamic_string source_location;
 };

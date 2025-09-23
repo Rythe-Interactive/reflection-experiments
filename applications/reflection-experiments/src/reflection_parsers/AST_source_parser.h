@@ -2,9 +2,11 @@
 #include <clang-c/Index.h>
 #include <iostream>
 #include <filesystem>
+#include <map>
 #include <unordered_set>
 #include "../code_gen/reflection_code_generator.h"
 #include "../runtime_reflection_containers/reflected_variable.h"
+#include  "../compiletime_reflection_containers/comp_reflected_file.h"
 #include "../reflection_properties/access_modifier.h"
 #include "../code_gen/reflection_code_generator.h"
 
@@ -33,6 +35,8 @@ namespace reflection_parsers {
 
         reflection_code_generator code_generator;
         CXIndex index;
+
+        std::map<rsl::dynamic_string, std::unique_ptr<comp_reflected_file>> all_files;
         
         CXChildVisitResult visitor(
             CXCursor current_cursor,
@@ -42,5 +46,6 @@ namespace reflection_parsers {
         void AST_parse_file(const std::string filePath, CXIndex index);
 
         rythe::reflection_containers::reflected_variable extract_variable(CXCursor cursor);
+        comp_reflected_variable extract_compile_variable(CXCursor cursor);
     };
 }

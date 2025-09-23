@@ -1,9 +1,9 @@
 #pragma once
-#include "../compiletime_reflection_containers/comp_reflected_variable.h"
+#include "comp_reflected_variable.h"
 
 class comp_reflected_variable_container {
 public:
-    void addVariable(comp_reflected_variable);
+    void addVariable(comp_reflected_variable variable);
 
     comp_reflected_variable_container();
     ~comp_reflected_variable_container();

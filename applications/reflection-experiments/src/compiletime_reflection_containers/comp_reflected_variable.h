@@ -3,7 +3,7 @@
 
 #include "comp_reflected_element.h"
 
-struct comp_reflected_variable : public comp_reflected_element {
+class comp_reflected_variable : public comp_reflected_element {
 public:
     rsl::dynamic_string name;
     rsl::dynamic_string type;

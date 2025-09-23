@@ -63,16 +63,41 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor(
     if (char_display_name && char_display_name[0] != '\0') {
         for (int i = 0; i < data->depth; i++) std::cout << "  ";
         std::cout << "Visiting element: " << char_display_name << "\n";
+
+        CXSourceLocation location = clang_getCursorLocation(current_cursor);
+        CXFile file;
+        unsigned int line, column, offset;
+
+        clang_getSpellingLocation(location, &file, &line, &column, &offset);
+
+        CXString file_name = clang_getFileName(file);
+        const char* file_name_spelling = clang_getCString(file_name);
+
+        rsl::dynamic_string file_name_string = rsl::dynamic_string::from_string_length(file_name_spelling);
+        auto it = all_files.find(file_name_string);
+        if (it == all_files.end()) {
+            all_files[file_name_string] = std::make_unique<comp_reflected_file>(file_name_string);
+        }
         
         if (clang_getCursorKind(parent) == CXCursor_FunctionDecl) {}
-        std::cout << clang_getCursorKind(current_cursor) << std::endl;
-        std::cout << (CXCursor_FieldDecl == clang_getCursorKind(current_cursor)) << "lalalalal "<< std::endl;
+        
         if (CXCursor_FieldDecl == clang_getCursorKind(current_cursor)) {
-          rythe::reflection_containers::reflected_variable reflected_variable = extract_variable(current_cursor);
-            code_generator.generate_reflected_variable_file(reflected_variable, "reflected_variable.generated");
+            comp_reflected_variable reflected_variable = extract_compile_variable(current_cursor);
+
+            CXCursor parent_cursor = clang_getCursorSemanticParent(current_cursor);
+            CXString parent_usr = clang_getCursorUSR(parent_cursor);
+            const char* parent_usr_spelling = clang_getCString(parent_usr);
+
+            all_files[file_name_string]->addVariableToFile(
+                rsl::dynamic_string::from_string_length(parent_usr_spelling),
+                reflected_variable);
+            
+            //code_generator.generate_reflected_variable_file(reflected_variable, "reflected_variable.generated");
             std::cout << "indeed true" << std::endl;
+
+            clang_disposeString(parent_usr);
         }
-        std::cout << (CXCursor_FieldDecl == clang_getCursorKind(current_cursor)) << "lalalalal "<< std::endl;
+        
         clang_disposeString(current_display_name);
         visitor_context child{.self = data->self, .depth = data->depth + 1 };
         
@@ -93,7 +118,7 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor_callback_wrapp
     return self->visitor(cursor, parent, client_data);
 }
 
- rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_parser::extract_variable(CXCursor cursor) {
+rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_parser::extract_variable(CXCursor cursor) {
     
     CXString field_name = clang_getCursorSpelling(cursor);
 
@@ -165,6 +190,29 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor_callback_wrapp
         align,
         reflection_id(rsl::dynamic_string::from_string_length(type_cstr)),
         attributes);
+}
+
+comp_reflected_variable reflection_parsers::AST_source_parser::extract_compile_variable(CXCursor cursor) {
+    CXString field_name = clang_getCursorSpelling(cursor);
+    const char* field_spelling = clang_getCString(field_name);
+    
+    CXType cursorType = clang_getCursorType(cursor);
+    CXString typeSpelling = clang_getTypeSpelling(cursorType);
+    const char* type_spelling = clang_getCString(typeSpelling);
+    
+    CXString cursor_usr = clang_getCursorUSR(cursor);
+    const char* usr_spelling = clang_getCString(cursor_usr);
+    
+    comp_reflected_variable return_variable = comp_reflected_variable(rsl::dynamic_string::from_string_length(usr_spelling));
+
+    return_variable.name = rsl::dynamic_string::from_string_length(field_spelling);
+    return_variable.type = rsl::dynamic_string::from_string_length(type_spelling);
+
+    clang_disposeString(field_name);
+    clang_disposeString(typeSpelling);
+    clang_disposeString(cursor_usr);
+    
+    return return_variable;
 }
 
 
