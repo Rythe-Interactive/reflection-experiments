@@ -6,23 +6,24 @@
 #include "reflection_parsers/AST_source_parser.h"
 
 
-int main(int, char* argv[]) {
-
+int main(int, char* argv[])
+{
     rsl::cli_parser cmdl(argv);
 
     std::unordered_set<std::string> folders;
-    
+
     std::string string;
-    for (auto& param : cmdl.params("fpath")) {
+    for(auto& param : cmdl.params("fpath"))
+    {
         std::cout << '\t' << param.first << " : " << param.second << '\n';
         folders.insert(param.second);
     }
-    
+
     std::cout << "Here is the parameter: " << string << std::endl;
 
-    reflection_parsers::AST_source_parser parser = reflection_parsers::AST_source_parser();
-    
-    parser.parse_source_folders(folders);    
-    
+    auto parser = reflection_parsers::AST_source_parser();
+
+    parser.parse_source_folders(folders);
+
     return 0;
 }

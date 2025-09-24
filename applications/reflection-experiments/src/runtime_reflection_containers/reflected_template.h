@@ -1,6 +1,3 @@
 #pragma once
 
-struct reflected_template
-{
-    
-};
+struct reflected_template {};

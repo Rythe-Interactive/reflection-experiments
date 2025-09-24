@@ -1,6 +1,3 @@
 #pragma once
 
-struct reflected_enum
-{
-    
-};
+struct reflected_enum {};
