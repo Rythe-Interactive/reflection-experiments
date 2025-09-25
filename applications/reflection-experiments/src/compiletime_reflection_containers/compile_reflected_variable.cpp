@@ -18,6 +18,6 @@ compile_reflected_variable::compile_reflected_variable(CXCursor cursor)
 
 compile_reflected_variable::~compile_reflected_variable() {}
 
-compile_reflected_variable::compile_reflected_variable(compile_reflected_variable&& other) {}
-
 compile_reflected_variable::compile_reflected_variable(const compile_reflected_variable& other) {}
+
+compile_reflected_variable::compile_reflected_variable(compile_reflected_variable&& other) {}

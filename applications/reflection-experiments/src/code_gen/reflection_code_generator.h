@@ -11,5 +11,7 @@ public:
     reflection_code_generator();
     ~reflection_code_generator();
 
-    void generate_reflected_variable_file(const rythe::reflection_containers::reflected_variable& parsed_variable, const std::string& outFile);
+    void generate_reflected_variable_file(
+        const rythe::reflection_containers::reflected_variable& parsed_variable,
+        const std::string&                                      outFile);
 };

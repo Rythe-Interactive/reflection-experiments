@@ -1,18 +1,18 @@
-#include "AST_source_parser.h"
+#include "ast_source_parser.h"
 
 #include "../runtime_reflection_containers/reflected_function.h"
 #include "../runtime_reflection_containers/reflected_variable.h"
 
-reflection_parsers::AST_source_parser::AST_source_parser()
+reflection_parsers::ast_source_parser::ast_source_parser()
 {
     index = clang_createIndex(0, 0);
 
     code_generator = reflection_code_generator();
 }
 
-reflection_parsers::AST_source_parser::~AST_source_parser() {}
+reflection_parsers::ast_source_parser::~ast_source_parser() {}
 
-void reflection_parsers::AST_source_parser::parse_source_folders(const std::unordered_set<std::string>& folders)
+void reflection_parsers::ast_source_parser::parse_source_folders(const std::unordered_set<std::string>& folders)
 {
     index = clang_createIndex(0, 0);
 
@@ -22,18 +22,27 @@ void reflection_parsers::AST_source_parser::parse_source_folders(const std::unor
         {
             if(!entry.is_regular_file()) { continue; }
             std::filesystem::path path = entry.path();
-            if(path.extension() == ".hpp" || path.extension() == ".h") { AST_parse_file(path.string().c_str(), index); }
+            if(path.extension() == ".hpp" || path.extension() == ".h")
+            {
+                ast_parse_file(rsl::dynamic_string::from_string_length(path.string().c_str()), index);
+            }
         }
     }
 }
 
-CXChildVisitResult reflection_parsers::AST_source_parser::visitor_callback_wrapper(CXCursor cursor, CXCursor parent, CXClientData client_data)
+CXChildVisitResult reflection_parsers::ast_source_parser::visitor_callback_wrapper(
+    CXCursor     cursor,
+    CXCursor     parent,
+    CXClientData client_data)
 {
-    auto self = static_cast<reflection_parsers::AST_source_parser*>(client_data);
+    auto self = static_cast<reflection_parsers::ast_source_parser*>(client_data);
     return self->visitor(cursor, parent, client_data);
 }
 
-CXChildVisitResult reflection_parsers::AST_source_parser::visitor(CXCursor current_cursor, CXCursor parent, CXClientData client_data)
+CXChildVisitResult reflection_parsers::ast_source_parser::visitor(
+    CXCursor     current_cursor,
+    CXCursor     parent,
+    CXClientData client_data)
 {
     auto* data = static_cast<visitor_context*>(client_data);
 
@@ -55,8 +64,11 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor(CXCursor curre
 
         rsl::dynamic_string file_name_string = rsl::dynamic_string::from_string_length(file_name_spelling);
         auto                it = all_files.find(file_name_string);
-        
-        if(it == all_files.end()) { all_files[file_name_string] = std::make_unique<compile_reflected_file>(file_name_string); }
+
+        if(it == all_files.end())
+        {
+            all_files[file_name_string] = std::make_unique<compile_reflected_file>(file_name_string);
+        }
 
         if(clang_getCursorKind(parent) == CXCursor_FunctionDecl) {}
 
@@ -68,7 +80,9 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor(CXCursor curre
             CXString    parent_usr = clang_getCursorUSR(parent_cursor);
             const char* parent_usr_spelling = clang_getCString(parent_usr);
 
-            all_files[file_name_string]->add_variable_to_file(rsl::dynamic_string::from_string_length(parent_usr_spelling), reflected_variable);
+            all_files[file_name_string]->add_variable_to_file(
+                rsl::dynamic_string::from_string_length(parent_usr_spelling),
+                reflected_variable);
 
             //code_generator.generate_reflected_variable_file(reflected_variable, "reflected_variable.generated");
             std::cout << "indeed true" << std::endl;
@@ -84,9 +98,16 @@ CXChildVisitResult reflection_parsers::AST_source_parser::visitor(CXCursor curre
     return CXChildVisit_Continue;
 }
 
-void reflection_parsers::AST_source_parser::AST_parse_file(const std::string filePath, CXIndex index)
+void reflection_parsers::ast_source_parser::ast_parse_file(const rsl::dynamic_string filePath, CXIndex index)
 {
-    CXTranslationUnit unit = clang_parseTranslationUnit(index, filePath.c_str(), nullptr, 0, nullptr, 0, CXTranslationUnit_None);
+    CXTranslationUnit unit = clang_parseTranslationUnit(
+        index,
+        filePath.c_str(),
+        nullptr,
+        0,
+        nullptr,
+        0,
+        CXTranslationUnit_None);
 
     if(unit == nullptr)
     {
@@ -97,14 +118,38 @@ void reflection_parsers::AST_source_parser::AST_parse_file(const std::string fil
 
     visitor_context context = {.self = this, .depth = 0};
 
-    clang_visitChildren(
-        cursor,
-        visitor_callback_wrapper,
-        &context
-    );
+    auto  reflected_file = std::make_unique<compile_reflected_file>(filePath);
+    auto& file_ref = *reflected_file;
+
+    all_files.emplace(filePath, std::move(reflected_file));
+
+    clang_visitChildren(cursor, visitor_callback_wrapper, &context);
 }
 
-rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_parser::extract_variable(CXCursor cursor)
+void reflection_parsers::ast_source_parser::ast_parse_cursor_from_class(
+    CXCursor                 cursor,
+    compile_reflected_class& reflected_class)
+{
+    CXCursorKind kind = clang_getCursorKind(cursor);
+    std::cout << kind << std::endl;
+    switch(kind)
+    {
+        case CXCursor_ClassDecl:
+            //ast_parse_cursor_from_class(cursor, reflected_class);
+            break;
+        case CXCursor_FieldDecl:
+            compile_reflected_variable& variable = reflected_class.add_variable_from_cursor(cursor);
+            break;
+        case CXCursor_FunctionDecl:
+            break;
+
+        default:
+            break;
+    }
+}
+
+rythe::reflection_containers::reflected_variable reflection_parsers::ast_source_parser::extract_variable(
+    CXCursor cursor)
 {
     CXString field_name = clang_getCursorSpelling(cursor);
 
@@ -164,6 +209,17 @@ rythe::reflection_containers::reflected_variable reflection_parsers::AST_source_
     clang_disposeString(field_name);
     clang_disposeString(parent_name);
 
-
-    return rythe::reflection_containers::reflected_variable(rsl::hashed_string::from_string_length(field_cstr), rsl::dynamic_string::from_string_length(parent_cstr), access, is_static, is_const, is_array, array_size, offset, size, align, reflection_id(rsl::dynamic_string::from_string_length(type_cstr)), attributes);
+    return rythe::reflection_containers::reflected_variable(
+        rsl::hashed_string::from_string_length(field_cstr),
+        rsl::dynamic_string::from_string_length(parent_cstr),
+        access,
+        is_static,
+        is_const,
+        is_array,
+        array_size,
+        offset,
+        size,
+        align,
+        reflection_id(rsl::dynamic_string::from_string_length(type_cstr)),
+        attributes);
 }

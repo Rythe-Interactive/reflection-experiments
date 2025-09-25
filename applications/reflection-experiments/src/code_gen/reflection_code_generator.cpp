@@ -6,7 +6,8 @@
 #include "../runtime_reflection_containers/reflected_function.h"
 #include "../runtime_reflection_containers/reflected_variable.h"
 
-rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflection_containers::reflected_variable parsed_variable)
+rsl::dynamic_string reflection_code_generator::generate_variable(
+    rythe::reflection_containers::reflected_variable parsed_variable)
 {
     std::string        pad = "    ";
     std::ostringstream out;
@@ -128,7 +129,9 @@ rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflecti
 */
 
 
-void reflection_code_generator::generate_reflected_variable_file(const rythe::reflection_containers::reflected_variable& parsed_variable, const std::string& outFile)
+void reflection_code_generator::generate_reflected_variable_file(
+    const rythe::reflection_containers::reflected_variable& parsed_variable,
+    const std::string&                                      outFile)
 {
     std::cout << "reflection_code_generator::generate_reflected_variable_file\n";
     std::ofstream file(outFile);

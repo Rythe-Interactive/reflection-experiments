@@ -7,7 +7,7 @@ public:
     compile_reflected_variable_container();
     ~compile_reflected_variable_container();
 
-    void add_variable(CXCursor cursor);
+    compile_reflected_variable& add_variable_from_cursor(CXCursor cursor);
 protected:
     std::vector<compile_reflected_variable> variables;
 };

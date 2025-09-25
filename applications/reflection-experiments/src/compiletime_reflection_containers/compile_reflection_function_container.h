@@ -2,11 +2,12 @@
 #include <vector>
 
 #include "compile_reflection_function.h"
+#include "clang-c/Index.h"
 
 class compile_reflected_function_container
 {
 public:
-    void add_variable(compile_reflection_function function);
+    compile_reflection_function& add_function_from_cursor(CXCursor cursor);
 
     compile_reflected_function_container();
     ~compile_reflected_function_container();

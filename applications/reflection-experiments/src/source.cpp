@@ -3,7 +3,7 @@
 #include "rsl/containers"
 #include "rsl/cli"
 
-#include "reflection_parsers/AST_source_parser.h"
+#include "reflection_parsers/ast_source_parser.h"
 
 
 int main(int, char* argv[])
@@ -21,7 +21,7 @@ int main(int, char* argv[])
 
     std::cout << "Here is the parameter: " << string << std::endl;
 
-    auto parser = reflection_parsers::AST_source_parser();
+    auto parser = reflection_parsers::ast_source_parser();
 
     parser.parse_source_folders(folders);
 

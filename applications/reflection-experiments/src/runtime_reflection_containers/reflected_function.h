@@ -22,7 +22,16 @@ namespace rythe::reflection_containers
         rsl::dynamic_array<reflection_id>       parameters;
         rsl::dynamic_array<rsl::dynamic_string> attributes;
     public:
-        reflected_function(rsl::hashed_string name, rsl::dynamic_string current_namespace, reflection_properties::acess_modifier access_modifier, bool is_static, bool is_const, void* memory_reference, reflection_id return_type_id, rsl::dynamic_array<reflection_id> parameters, rsl::dynamic_array<rsl::dynamic_string> attributes);
+        reflected_function(
+            rsl::hashed_string                      name,
+            rsl::dynamic_string                     current_namespace,
+            reflection_properties::acess_modifier   access_modifier,
+            bool                                    is_static,
+            bool                                    is_const,
+            void*                                   memory_reference,
+            reflection_id                           return_type_id,
+            rsl::dynamic_array<reflection_id>       parameters,
+            rsl::dynamic_array<rsl::dynamic_string> attributes);
 
         const rsl::hashed_string&             get_name() const;
         const rsl::dynamic_string&            get_namespace() const;

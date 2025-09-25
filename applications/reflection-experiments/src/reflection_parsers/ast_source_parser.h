@@ -7,6 +7,7 @@
 #include "../code_gen/reflection_code_generator.h"
 #include "../runtime_reflection_containers/reflected_variable.h"
 #include  "../compiletime_reflection_containers/compile_reflected_file.h"
+#include  "../compiletime_reflection_containers/compile_reflected_class.h"
 #include "../reflection_properties/access_modifier.h"
 #include "../code_gen/reflection_code_generator.h"
 
@@ -14,17 +15,17 @@
 
 namespace reflection_parsers
 {
-    class AST_source_parser
+    class ast_source_parser
     {
     public:
         struct visitor_context
         {
-            AST_source_parser* self;
+            ast_source_parser* self;
             int                depth;
         };
 
-        AST_source_parser();
-        ~AST_source_parser();
+        ast_source_parser();
+        ~ast_source_parser();
 
         void parse_source_folders(const std::unordered_set<std::string>& folders);
 
@@ -37,9 +38,11 @@ namespace reflection_parsers
 
         CXChildVisitResult visitor(CXCursor current_cursor, CXCursor parent, CXClientData client_data);
 
-        void AST_parse_file(const std::string filePath, CXIndex index);
+        void ast_parse_file(const rsl::dynamic_string filePath, CXIndex index);
+        void ast_parse_cursor_from_class(CXCursor cursor, compile_reflected_class& reflected_class);
+        //void ast_parse_namespace(CXCursor cursor, compile_reflected_class* reflected_class);
+        //void ast_parse_variable(CXCursor cursor, compile_reflected_variable* variable);
 
         rythe::reflection_containers::reflected_variable extract_variable(CXCursor cursor);
-        compile_reflected_variable                       extract_compile_variable(CXCursor cursor);
     };
 }
