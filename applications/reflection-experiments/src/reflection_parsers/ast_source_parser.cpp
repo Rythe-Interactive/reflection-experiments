@@ -103,13 +103,11 @@ void reflection_parsers::ast_source_parser::ast_parse_file(const rsl::dynamic_st
         return;
     }
     CXCursor cursor = clang_getTranslationUnitCursor(unit); //Obtain a cursor at the root of the translation unit
-
-    visitor_context context = {.self = this, .depth = 0};
-
+    
     auto reflected_file = std::make_unique<compile_reflected_file>(filePath);
     all_files.emplace(filePath, std::move(reflected_file));
 
-    clang_visitChildren(cursor, visitor_from_file, &context);
+    clang_visitChildren(cursor, visitor_from_file, &reflected_file);
 }
 
 rythe::reflection_containers::reflected_variable reflection_parsers::ast_source_parser::extract_variable(
