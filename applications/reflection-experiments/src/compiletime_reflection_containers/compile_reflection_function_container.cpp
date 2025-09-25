@@ -9,9 +9,3 @@ compile_reflection_function& compile_reflected_function_container::add_function_
 compile_reflected_function_container::compile_reflected_function_container() {}
 
 compile_reflected_function_container::~compile_reflected_function_container() {}
-
-compile_reflected_function_container::compile_reflected_function_container(
-    const compile_reflected_function_container& other) {}
-
-compile_reflected_function_container::compile_reflected_function_container(
-    compile_reflected_function_container&& other) {}

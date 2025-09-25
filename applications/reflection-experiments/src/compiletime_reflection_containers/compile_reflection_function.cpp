@@ -16,8 +16,4 @@ compile_reflection_function::compile_reflection_function(CXCursor cursor)
     clang_disposeString(typeSpelling);
 }
 
-compile_reflection_function::compile_reflection_function(const compile_reflection_function& other) {}
-
-compile_reflection_function::compile_reflection_function(compile_reflection_function&& other) {}
-
 compile_reflection_function::~compile_reflection_function() {}

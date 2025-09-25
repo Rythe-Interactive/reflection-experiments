@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <deque>
 
 #include "compile_reflection_function.h"
 #include "clang-c/Index.h"
@@ -11,8 +11,8 @@ public:
 
     compile_reflected_function_container();
     ~compile_reflected_function_container();
-    compile_reflected_function_container(const compile_reflected_function_container& other);
-    compile_reflected_function_container(compile_reflected_function_container&& other);
+    compile_reflected_function_container(const compile_reflected_function_container& other) = default;
+    compile_reflected_function_container(compile_reflected_function_container&& other) noexcept = default;
 protected:
-    std::vector<compile_reflection_function> functions;
+    std::deque<compile_reflection_function> functions;
 };
