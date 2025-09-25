@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-#include "rsl/impl/containers/string.hpp"
+#include <rsl/string>
 
 struct reflection_id
 {

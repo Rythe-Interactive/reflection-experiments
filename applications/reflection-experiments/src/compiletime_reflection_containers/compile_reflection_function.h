@@ -1,6 +1,7 @@
 #pragma once
 #include "clang-c/Index.h"
-#include "rsl/impl/containers/string.hpp"
+
+#include <rsl/string>
 
 class compile_reflection_function
 {
