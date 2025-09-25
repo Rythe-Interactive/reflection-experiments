@@ -2,7 +2,8 @@
 #include "compile_reflected_class_container.h"
 #include "compile_reflected_variable_container.h"
 #include "compile_reflection_function_container.h"
-#include "rsl/impl/containers/string.hpp"
+
+#include <rsl/string>
 
 class compile_reflected_class
     : public compile_reflected_class_container,

@@ -1,8 +1,10 @@
 #pragma once
 #include <rsl/containers>
+#include <rsl/string>
+
 #include "../reflection_properties/access_modifier.h"
 #include "../reflection_id/reflection_id.h"
-#include "rsl/impl/containers/hashed_string.hpp"
+
 
 namespace rythe::reflection_containers
 {

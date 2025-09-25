@@ -53,7 +53,7 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor(
         for(auto i = 0; i < data->depth; i++) { std::cout << "  "; }
         std::cout << "Visiting element: " << char_display_name << "\n";
 
-        CXSourceLocation location = clang_getCursorLocation(current_cursor);
+        CXSourceLocation location = clang_getCursorLocation(current_cursor); // this variable could be const, it's good practice to make anything that can be const, const
         CXFile           file;
         unsigned int     line, column, offset;
 
@@ -63,7 +63,7 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor(
         const char* file_name_spelling = clang_getCString(file_name);
 
         rsl::dynamic_string file_name_string = rsl::dynamic_string::from_string_length(file_name_spelling);
-        auto                it = all_files.find(file_name_string);
+        auto                it = all_files.find(file_name_string); // could be const auto
 
         if(it == all_files.end())
         {
@@ -102,7 +102,7 @@ void reflection_parsers::ast_source_parser::ast_parse_file(const rsl::dynamic_st
 {
     CXTranslationUnit unit = clang_parseTranslationUnit(
         index,
-        filePath.c_str(),
+        filePath.data(),
         nullptr,
         0,
         nullptr,
@@ -118,6 +118,7 @@ void reflection_parsers::ast_source_parser::ast_parse_file(const rsl::dynamic_st
 
     visitor_context context = {.self = this, .depth = 0};
 
+    // obviously WIP xD
     auto  reflected_file = std::make_unique<compile_reflected_file>(filePath);
     auto& file_ref = *reflected_file;
 
