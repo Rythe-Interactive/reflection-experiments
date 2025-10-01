@@ -34,6 +34,8 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_file(
     CXCursor     parent_cursor,
     CXClientData client_data)
 {
+    if(parent_cursor.kind) {}
+    
     auto* parent_file = static_cast<compile_reflected_file*>(client_data);
 
     CXCursorKind kind = clang_getCursorKind(current_cursor);
@@ -41,15 +43,22 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_file(
     switch(kind)
     {
         case CXCursor_ClassDecl:
-            compile_reflected_class& reflected_class = parent_file->add_class_from_cursor(current_cursor);
+        {
+            compile_reflected_class& reflected_class = parent_file->compile_reflected_container<
+                compile_reflected_class>::add_element(current_cursor);
             clang_visitChildren(current_cursor, visitor_from_class, &reflected_class);
             break;
+        }
         case CXCursor_FieldDecl:
-            compile_reflected_variable& reflected_variable = parent_file->add_variable_from_cursor(current_cursor);
+        {
+            parent_file->compile_reflected_container<compile_reflected_variable>::add_element(current_cursor);
             break;
+        }
         case CXCursor_FunctionDecl:
+        {
             std::cout << "Indeed a function" << '\n';
             break;
+        }
         default:
             break;
     }
@@ -61,6 +70,8 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
     CXCursor     parent_cursor,
     CXClientData client_data)
 {
+    if(parent_cursor.kind) {}
+    
     auto*        parent_class = static_cast<compile_reflected_class*>(client_data);
     CXCursorKind kind = clang_getCursorKind(current_cursor);
 
@@ -69,16 +80,22 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
     switch(kind)
     {
         case CXCursor_ClassDecl:
-            compile_reflected_class& reflected_class = parent_class->add_class_from_cursor(current_cursor);
+        {
+            compile_reflected_class& reflected_class = parent_class->compile_reflected_container<
+                compile_reflected_class>::add_element(current_cursor);
             clang_visitChildren(current_cursor, visitor_from_class, &reflected_class);
             break;
+        }
         case CXCursor_FieldDecl:
-            compile_reflected_variable& variable = parent_class->add_variable_from_cursor(current_cursor);
+        {
+            parent_class->compile_reflected_container<compile_reflected_variable>::add_element(current_cursor);
             break;
+        }
         case CXCursor_FunctionDecl:
+        {
             std::cout << "Indeed a function" << '\n';
             break;
-
+        }
         default:
             break;
     }

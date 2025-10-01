@@ -2,14 +2,14 @@
 #include <map>
 
 #include "compile_reflected_class.h"
-#include "compile_reflected_variable_container.h"
-#include "compile_reflection_function_container.h"
+#include "compile_reflected_variable.h"
+#include "compile_reflection_function.h"
 #include "clang-c/Index.h"
 
 struct compile_reflected_file
-    : public compile_reflected_variable_container,
-      public compile_reflected_function_container,
-      public compile_reflected_class_container
+    : public compile_reflected_container<compile_reflected_variable>,
+      public compile_reflected_container<compile_reflection_function>,
+      public compile_reflected_container<compile_reflected_class>
 {
 public:
     rsl::dynamic_string name;

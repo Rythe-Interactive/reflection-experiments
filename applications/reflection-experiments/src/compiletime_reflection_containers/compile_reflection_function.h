@@ -3,7 +3,7 @@
 
 #include <rsl/string>
 
-class compile_reflection_function
+struct compile_reflection_function
 {
 public:
     rsl::dynamic_string name;
