@@ -13,6 +13,7 @@ reflection_parsers::ast_source_parser::~ast_source_parser() {}
 
 void reflection_parsers::ast_source_parser::parse_source_folders(const std::unordered_set<std::string>& folders)
 {
+    //std::cout << "reflection_parsers::ast_source_parser::parse_source_folders" << std::endl;
     index = clang_createIndex(0, 0);
 
     for(auto folder : folders)
@@ -23,11 +24,17 @@ void reflection_parsers::ast_source_parser::parse_source_folders(const std::unor
             std::filesystem::path path = entry.path();
             if(path.extension() == ".hpp" || path.extension() == ".h")
             {
-                ast_parse_file(rsl::dynamic_string::from_string_length(path.string().c_str()), index);
+                ast_parse_file(path.string(), index);
             }
         }
     }
 }
+
+void reflection_parsers::ast_source_parser::print_all_files() const
+{
+    for(auto element : all_files) { element.second.print(0); }
+}
+
 
 CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_file(
     CXCursor     current_cursor,
@@ -37,21 +44,27 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_file(
     if(parent_cursor.kind) {}
     
     auto* parent_file = static_cast<compile_reflected_file*>(client_data);
-
     CXCursorKind kind = clang_getCursorKind(current_cursor);
-    std::cout << kind << '\n';
+
+    /*
+    CXString kind_spelling = clang_getCursorKindSpelling(kind);
+    std::cout << clang_getCString(kind_spelling) << '\n';
+
+    clang_disposeString(kind_spelling);
+    */
+
     switch(kind)
     {
         case CXCursor_ClassDecl:
         {
-            compile_reflected_class& reflected_class = parent_file->compile_reflected_container<
+            compile_reflected_class& reflected_class = parent_file->compile_reflection_container<
                 compile_reflected_class>::add_element(current_cursor);
             clang_visitChildren(current_cursor, visitor_from_class, &reflected_class);
             break;
         }
         case CXCursor_FieldDecl:
         {
-            parent_file->compile_reflected_container<compile_reflected_variable>::add_element(current_cursor);
+            parent_file->compile_reflection_container<compile_reflected_variable>::add_element(current_cursor);
             break;
         }
         case CXCursor_FunctionDecl:
@@ -75,20 +88,24 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
     auto*        parent_class = static_cast<compile_reflected_class*>(client_data);
     CXCursorKind kind = clang_getCursorKind(current_cursor);
 
-    std::cout << kind << std::endl;
+    /*
+    CXString kind_spelling = clang_getCursorKindSpelling(kind);
+    std::cout << clang_getCString(kind_spelling) << '\n';
 
+    clang_disposeString(kind_spelling);
+    */
     switch(kind)
     {
         case CXCursor_ClassDecl:
         {
-            compile_reflected_class& reflected_class = parent_class->compile_reflected_container<
+            compile_reflected_class& reflected_class = parent_class->compile_reflection_container<
                 compile_reflected_class>::add_element(current_cursor);
             clang_visitChildren(current_cursor, visitor_from_class, &reflected_class);
             break;
         }
         case CXCursor_FieldDecl:
         {
-            parent_class->compile_reflected_container<compile_reflected_variable>::add_element(current_cursor);
+            parent_class->compile_reflection_container<compile_reflected_variable>::add_element(current_cursor);
             break;
         }
         case CXCursor_FunctionDecl:
@@ -103,7 +120,7 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
 }
 
 
-void reflection_parsers::ast_source_parser::ast_parse_file(const rsl::dynamic_string filePath, CXIndex index)
+void reflection_parsers::ast_source_parser::ast_parse_file(const std::string&& filePath, CXIndex index)
 {
     CXTranslationUnit unit = clang_parseTranslationUnit(
         index,
@@ -120,8 +137,10 @@ void reflection_parsers::ast_source_parser::ast_parse_file(const rsl::dynamic_st
         return;
     }
     CXCursor cursor = clang_getTranslationUnitCursor(unit); //Obtain a cursor at the root of the translation unit
-    
-    auto reflected_file = std::make_unique<compile_reflected_file>(filePath);
+
+    auto reflected_file = compile_reflected_file(
+        rsl::dynamic_string::from_string_length(filePath.c_str()),
+        rsl::dynamic_string::from_string_length(filePath.c_str()));
     all_files.emplace(filePath, std::move(reflected_file));
 
     clang_visitChildren(cursor, visitor_from_file, &reflected_file);

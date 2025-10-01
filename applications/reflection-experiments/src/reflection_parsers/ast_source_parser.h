@@ -19,14 +19,15 @@ namespace reflection_parsers
         ~ast_source_parser();
 
         void parse_source_folders(const std::unordered_set<std::string>& folders);
-    
+
+        void print_all_files() const;
     private:
         reflection_code_generator code_generator;
         CXIndex                   index;
 
         // I'd recommend either sticking to rsl containers or std containers, I've not made my containers with STL compatibility in mind.
         // Furthermore, why do these files need to be a unique_ptr?
-        std::map<rsl::dynamic_string, std::unique_ptr<compile_reflected_file>> all_files;
+        std::map<std::string, compile_reflected_file> all_files;
 
         // If this function is a static function that is never needed outside ast_source_parser.cpp, then it would be best to keep
         // it as a translation unit local function. You do this by moving this function into ast_source_parser.cpp and either marking
@@ -47,7 +48,7 @@ namespace reflection_parsers
         // However, you can use rsl::dynamic_string&& in order to force the calling code to create a temporary string object.
         // The reason you'd do that is in order to make the caller aware of the allocation that will happen inside the function because
         // you expect the function to be called in a place where allocations are not in the budget.
-        void ast_parse_file(const rsl::dynamic_string filePath, CXIndex index);
+        void ast_parse_file(const std::string&& filePath, CXIndex index);
 
         rythe::reflection_containers::reflected_variable extract_variable(CXCursor cursor);
     };
