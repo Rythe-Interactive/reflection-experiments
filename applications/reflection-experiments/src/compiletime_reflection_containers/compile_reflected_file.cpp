@@ -15,8 +15,8 @@ void compile_reflected_file::print(int indent) const
     for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
     std::cout << this->source_location.data() << '\n';
 
-    compile_reflection_container<compile_reflected_class>::print_container(indent + 1);
-    compile_reflection_container<compile_reflected_function>::print_container(indent + 1);
-    compile_reflection_container<compile_reflected_variable>::print_container(indent + 1);
+    this->compile_reflection_container<compile_reflected_class>::print_container(indent + 1);
+    this->compile_reflection_container<compile_reflected_function>::print_container(indent + 1);
+    this->compile_reflection_container<compile_reflected_variable>::print_container(indent + 1);
 }
 

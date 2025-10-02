@@ -15,6 +15,7 @@ void compile_reflection_container<T>::print_container(int indent) const
 {
     for(const auto& element : container)
     {
+        
         auto element_object = dynamic_cast<compile_reflected_element*>(element.get());
         if(!element_object) { std::cout << "Reflected container does not store reflected elements." << '\n'; }
         element_object->print(indent);

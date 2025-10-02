@@ -16,7 +16,7 @@ void reflection_parsers::ast_source_parser::parse_source_folders(const std::unor
     //std::cout << "reflection_parsers::ast_source_parser::parse_source_folders" << std::endl;
     index = clang_createIndex(0, 0);
 
-    for(auto folder : folders)
+    for(auto& folder : folders)
     {
         for(const auto& entry : std::filesystem::recursive_directory_iterator(folder))
         {
@@ -28,11 +28,12 @@ void reflection_parsers::ast_source_parser::parse_source_folders(const std::unor
             }
         }
     }
+    print_all_files();
 }
 
 void reflection_parsers::ast_source_parser::print_all_files() const
 {
-    for(auto element : all_files) { element.second.print(0); }
+    for(const auto& element : all_files) { element.second.print(0); }
 }
 
 
@@ -122,6 +123,7 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
 
 void reflection_parsers::ast_source_parser::ast_parse_file(const std::string&& filePath, CXIndex index)
 {
+    std::cout << "Parsing file path: " << filePath << '\n';
     CXTranslationUnit unit = clang_parseTranslationUnit(
         index,
         filePath.data(),
@@ -138,12 +140,25 @@ void reflection_parsers::ast_source_parser::ast_parse_file(const std::string&& f
     }
     CXCursor cursor = clang_getTranslationUnitCursor(unit); //Obtain a cursor at the root of the translation unit
 
-    auto reflected_file = compile_reflected_file(
-        rsl::dynamic_string::from_string_length(filePath.c_str()),
-        rsl::dynamic_string::from_string_length(filePath.c_str()));
-    all_files.emplace(filePath, std::move(reflected_file));
+    auto [iterator, inserted] = all_files.emplace(
+        filePath,
+        compile_reflected_file(
+            rsl::dynamic_string::from_string_length(extract_file_name(std::string_view(filePath)).data()),
+            rsl::dynamic_string::from_string_length(filePath.c_str())));
 
-    clang_visitChildren(cursor, visitor_from_file, &reflected_file);
+    clang_visitChildren(cursor, visitor_from_file, &iterator->second);
+}
+
+std::string_view reflection_parsers::ast_source_parser::extract_file_name(const std::string_view file_path)
+{
+    size_t           last_slash_position = file_path.rfind('\\');
+    std::string_view file_name;
+    if(last_slash_position != std::string::npos)
+    {
+        file_name = file_path.substr(last_slash_position + 1, file_path.size() - last_slash_position);
+    }
+    else { std::cerr << "File name is empty.\n"; }
+    return file_name;
 }
 
 rythe::reflection_containers::reflected_variable reflection_parsers::ast_source_parser::extract_variable(

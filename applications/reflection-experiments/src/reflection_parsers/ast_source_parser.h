@@ -50,6 +50,8 @@ namespace reflection_parsers
         // you expect the function to be called in a place where allocations are not in the budget.
         void ast_parse_file(const std::string&& filePath, CXIndex index);
 
+        static std::string_view extract_file_name(const std::string_view filePath);
+        
         rythe::reflection_containers::reflected_variable extract_variable(CXCursor cursor);
     };
 }

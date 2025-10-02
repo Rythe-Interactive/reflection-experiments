@@ -17,7 +17,7 @@ rsl::dynamic_string compile_reflected_element::get_name_from_cursor(CXCursor& cu
 {
     CXString    field_name = clang_getCursorSpelling(cursor);
     const char* field_spelling = clang_getCString(field_name);
-    clang_disposeString(field_name);
     auto result = rsl::dynamic_string::from_string_length(field_spelling);
+    clang_disposeString(field_name);
     return result;
 }

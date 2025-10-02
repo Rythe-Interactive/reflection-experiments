@@ -19,8 +19,6 @@ int main(int, char* argv[])
         folders.insert(param.second);
     }
 
-    std::cout << "Here is the parameter: " << string << std::endl;
-
     auto parser = reflection_parsers::ast_source_parser();
 
     parser.parse_source_folders(folders);
