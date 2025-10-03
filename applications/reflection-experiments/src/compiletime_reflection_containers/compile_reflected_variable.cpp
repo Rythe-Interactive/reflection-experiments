@@ -16,8 +16,10 @@ compile_reflected_variable::~compile_reflected_variable() {}
 
 void compile_reflected_variable::print(int indent) const
 {
-    compile_reflected_element::print(indent);
+    for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
+    std::cout << "Field name: ";
+    compile_reflected_element::print(0);
 
     for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
-    std::cout << this->type.data() << '\n';
+    std::cout << "Type: " << this->type.data() << '\n';
 }

@@ -17,8 +17,10 @@ compile_reflected_function::~compile_reflected_function() {}
 
 void compile_reflected_function::print(int indent) const
 {
-    compile_reflected_element::print(indent);
+    for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
+    std::cout << "Function name: ";
+    compile_reflected_element::print(0);
 
     for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
-    std::cout << this->type.data() << '\n';
+    std::cout << "Type: " << this->type.data() << '\n';
 }
