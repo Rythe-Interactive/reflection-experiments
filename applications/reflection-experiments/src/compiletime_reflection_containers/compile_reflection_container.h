@@ -2,6 +2,8 @@
 #include <memory>
 #include <vector>
 #include "clang-c/Index.h"
+#include "compile_reflected_element.h"
+#include <iostream>
 
 template<typename T>
 class compile_reflection_container

@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <stdio.h>
 
 #include "../runtime_reflection_containers/reflected_function.h"
 #include "../runtime_reflection_containers/reflected_variable.h"
@@ -70,6 +71,38 @@ rsl::dynamic_string reflection_code_generator::generate_variable(
 reflection_code_generator::reflection_code_generator() {}
 
 reflection_code_generator::~reflection_code_generator() {}
+
+void reflection_code_generator::generate_reflected_file(const compile_reflected_file& compile_file)
+{
+    const rsl::string_view source_location = compile_file.get_name();
+    std::ofstream          file(get_gen_source_file(source_location).data());
+    if(!file.is_open()) { std::cout << "Could not open file " << source_location.data() << " for writing.\n"; }
+
+    file << "#include \"reflected_variable.hpp\"\n";
+    file << "using namespace rythe::reflection_containers;\n\n";
+    file << "void generate_variable(rythe::reflection_containers::reflected_variable parsed_variable) {\n";
+    file << "    auto var = " << generate_variable(parsed_variable).data() << ";\n";
+    file << "}\n";
+}
+
+rsl::dynamic_string&& reflection_code_generator::get_gen_source_file(rsl::string_view source_location)
+{
+    if(source_location.size() > 256) { std::cout << "source_path is too long" << '\n'; }
+
+    char buffer[256];
+    strcpy_s(buffer, sizeof(source_location), source_location.data());
+    buffer[sizeof(source_location)] = '\0';
+
+    char* lastSlash = std::strrchr(buffer, '/');
+
+    if(lastSlash != nullptr) { *lastSlash = '\0'; }
+
+    strcat_s(buffer, "/generated");
+
+    return rsl::dynamic_string::from_buffer(buffer, sizeof(buffer));;
+}
+
+
 /*
 rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflection_containers::reflected_variable parsed_variable) {
 

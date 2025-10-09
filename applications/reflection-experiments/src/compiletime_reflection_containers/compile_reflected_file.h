@@ -18,6 +18,9 @@ public:
     ~compile_reflected_file();
 
     void print(int indent) const override;
+
+    rsl::string_view get_name() const;
+    
 private:
-    rsl::dynamic_string source_location;
+    const rsl::dynamic_string source_location;
 };

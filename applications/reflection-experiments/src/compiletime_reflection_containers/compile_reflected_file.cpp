@@ -8,6 +8,8 @@ compile_reflected_file::compile_reflected_file(rsl::dynamic_string&& name, rsl::
 
 compile_reflected_file::~compile_reflected_file() {}
 
+rsl::string_view compile_reflected_file::get_name() const { return source_location; }
+
 void compile_reflected_file::print(int indent) const
 {
     for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
