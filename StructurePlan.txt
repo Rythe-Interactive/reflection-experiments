@@ -31,3 +31,6 @@ Need to figure out which modifiers exactly can be used in the future.
 Need to add a way to manually add reflections.
 
 buffer_string,dynamic string
+
+
+For choices: Hash function, hash structure, compile vs runtime containers

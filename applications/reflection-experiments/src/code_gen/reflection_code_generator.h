@@ -17,6 +17,6 @@ public:
         const rythe::reflection_containers::reflected_variable& parsed_variable,
         const std::string&                                      outFile);
 
-    void                         generate_reflected_file(const compile_reflected_file& file);
-    static rsl::dynamic_string&& get_gen_source_file(rsl::string_view source_location);
+    void                       generate_reflected_file(const compile_reflected_file& file);
+    static rsl::dynamic_string get_gen_source_file(rsl::string_view source_location);
 };

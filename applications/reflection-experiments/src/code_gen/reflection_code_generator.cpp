@@ -81,25 +81,30 @@ void reflection_code_generator::generate_reflected_file(const compile_reflected_
     file << "#include \"reflected_variable.hpp\"\n";
     file << "using namespace rythe::reflection_containers;\n\n";
     file << "void generate_variable(rythe::reflection_containers::reflected_variable parsed_variable) {\n";
-    file << "    auto var = " << generate_variable(parsed_variable).data() << ";\n";
+    //file << "    auto var = " << generate_variable(parsed_variable).data() << ";\n";
     file << "}\n";
+
+    
 }
 
-rsl::dynamic_string&& reflection_code_generator::get_gen_source_file(rsl::string_view source_location)
+rsl::dynamic_string reflection_code_generator::get_gen_source_file(rsl::string_view source_location)
 {
-    if(source_location.size() > 256) { std::cout << "source_path is too long" << '\n'; }
+    if(source_location.size() >= 256)
+    {
+        std::cout << "source_path is too long\n";
+        return {};
+    }
 
     char buffer[256];
-    strcpy_s(buffer, sizeof(source_location), source_location.data());
-    buffer[sizeof(source_location)] = '\0';
-
+    std::memcpy(buffer, source_location.data(), source_location.size());
+    buffer[source_location.size()] = '\0';
+    
     char* lastSlash = std::strrchr(buffer, '/');
-
     if(lastSlash != nullptr) { *lastSlash = '\0'; }
 
-    strcat_s(buffer, "/generated");
+    strcat_s(buffer, sizeof(buffer), "/generated");
 
-    return rsl::dynamic_string::from_buffer(buffer, sizeof(buffer));;
+    return rsl::dynamic_string::from_buffer(buffer, std::strlen(buffer));
 }
 
 
