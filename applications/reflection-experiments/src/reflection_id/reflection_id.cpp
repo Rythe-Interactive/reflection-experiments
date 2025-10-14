@@ -23,9 +23,19 @@ bool reflection_id::operator==(const reflection_id& other) const noexcept
 
 bool reflection_id::operator!=(const reflection_id& other) const noexcept { return !(*this == other); }
 
-rsl::string_view reflection_id::get_hash_hex_string(const std::uint64_t& hash) {}
+rsl::string_view reflection_id::get_hash_value_hex_string(const std::uint64_t& hash)
+{
+    std::stringstream result;
+    result << "0x" << std::hex << hash;
+    return rsl::string_view::from_buffer(result.str().data(), result.str().size());
+}
 
-rsl::string_view reflection_id::get_hash_decimal_string(const std::uint64_t& hash) {}
+rsl::string_view reflection_id::get_hash_value_decimal_string(const std::uint64_t& hash)
+{
+    std::stringstream result;
+    result << "0x" << std::hex << hash;
+    return rsl::string_view::from_buffer(result.str().data(), result.str().size());
+}
 
 std::uint64_t reflection_id::compute_hash_from_string(rsl::string_view s) noexcept
 {

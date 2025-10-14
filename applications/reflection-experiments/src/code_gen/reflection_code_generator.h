@@ -2,7 +2,6 @@
 #include "../runtime_reflection_containers/reflected_variable.h"
 #include <sstream>
 #include <rsl/containers>
-
 #include "../compiletime_reflection_containers/compile_reflected_file.h"
 
 class reflection_code_generator

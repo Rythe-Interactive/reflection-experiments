@@ -30,8 +30,8 @@ public:
     bool operator==(const reflection_id& other) const noexcept;
     bool operator!=(const reflection_id& other) const noexcept;
 
-    static rsl::string_view get_hash_hex_string(const std::uint64_t& hashh);
-    static rsl::string_view get_hash_decimal_string(const std::uint64_t& hash);
+    static rsl::string_view get_hash_value_hex_string(const std::uint64_t& hash);
+    static rsl::string_view get_hash_value_decimal_string(const std::uint64_t& hash);
 
     static std::uint64_t compute_hash_from_string(rsl::string_view string);
     static std::uint64_t compute_hash_from_bytes(const void* data, std::size_t size);

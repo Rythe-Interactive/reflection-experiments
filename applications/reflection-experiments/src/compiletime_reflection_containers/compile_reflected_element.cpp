@@ -3,7 +3,7 @@
 #include <iostream>
 #include <ostream>
 
-compile_reflected_element::compile_reflected_element(rsl::dynamic_string&& name) : name(std::move(name)) {}
+compile_reflected_element::compile_reflected_element(rsl::dynamic_string name) : name(std::move(name)) {}
 
 compile_reflected_element::~compile_reflected_element() {}
 

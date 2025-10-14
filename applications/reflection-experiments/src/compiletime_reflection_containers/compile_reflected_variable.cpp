@@ -1,5 +1,7 @@
 #include "compile_reflected_variable.h"
 
+#include "../reflection_id/reflection_id.h"
+
 compile_reflected_variable::compile_reflected_variable(CXCursor cursor)
     : compile_reflected_element(get_name_from_cursor(cursor))
 {
@@ -12,6 +14,9 @@ compile_reflected_variable::compile_reflected_variable(CXCursor cursor)
     clang_disposeString(typeSpelling);
 }
 
+compile_reflected_variable::compile_reflected_variable(rsl::dynamic_string name, rsl::dynamic_string type)
+    : compile_reflected_element(name) {}
+
 compile_reflected_variable::~compile_reflected_variable() {}
 
 void compile_reflected_variable::print(int indent) const
@@ -23,3 +28,6 @@ void compile_reflected_variable::print(int indent) const
     for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
     std::cout << "Type: " << this->type.data() << '\n';
 }
+
+std::string_view compile_reflected_variable::get_string_constructor() const {}
+
