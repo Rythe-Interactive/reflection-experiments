@@ -3,7 +3,7 @@
 rythe::reflection_containers::reflected_variable::reflected_variable(
     rsl::hashed_string                      name,
     rsl::dynamic_string                     current_namespace,
-    reflection_properties::acess_modifier   access_modifier,
+    reflection_properties::access_modifier  access_modifier,
     bool                                    is_static,
     bool                                    is_const,
     bool                                    is_array,
@@ -38,7 +38,7 @@ const rsl::dynamic_string& rythe::reflection_containers::reflected_variable::get
     return this->current_namespace;
 }
 
-reflection_properties::acess_modifier rythe::reflection_containers::reflected_variable::get_access_modifier() const
+reflection_properties::access_modifier rythe::reflection_containers::reflected_variable::get_access_modifier() const
 {
     return this->access_modifier;
 }
@@ -72,7 +72,7 @@ void rythe::reflection_containers::reflected_variable::set_namespace(const rsl::
 }
 
 void rythe::reflection_containers::reflected_variable::set_access_modifier(
-    reflection_properties::acess_modifier access_modifier) { this->access_modifier = access_modifier; }
+    reflection_properties::access_modifier access_modifier) { this->access_modifier = access_modifier; }
 
 void rythe::reflection_containers::reflected_variable::set_is_static(bool is_static) { this->is_static = is_static; }
 
@@ -89,11 +89,6 @@ void rythe::reflection_containers::reflected_variable::set_size(size_t size) { t
 void rythe::reflection_containers::reflected_variable::set_alignment(uint16_t alignment)
 {
     this->alignment = alignment;
-}
-
-void rythe::reflection_containers::reflected_variable::set_type_id(const reflection_id& type_id)
-{
-    this->type_id = type_id;
 }
 
 void rythe::reflection_containers::reflected_variable::set_attributes(

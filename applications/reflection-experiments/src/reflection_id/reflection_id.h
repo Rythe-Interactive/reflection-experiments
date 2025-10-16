@@ -13,7 +13,7 @@
 struct reflection_id
 {
 public:
-    reflection_id(rsl::string_view name, const void* members_bytes, std::size_t members_size_bytes);
+    reflection_id(rsl::string_view name, const void* members_bytes, std::size_t members_size_bytes) noexcept;
 
     reflection_id(const reflection_id&) = default;
     reflection_id(reflection_id&&) = default;
@@ -25,7 +25,7 @@ public:
     std::uint64_t get_name_hash() const;
     std::uint64_t get_structure_hash() const;
 
-    std::pair<std::uint64_t, std::uint64_t> get_full_hash() const { return {name_hash, structure_hash}; }
+    std::pair<std::uint64_t, std::uint64_t> get_full_hash() const { return rsl::combine_hash(); }
 
     bool operator==(const reflection_id& other) const noexcept;
     bool operator!=(const reflection_id& other) const noexcept;
@@ -33,8 +33,8 @@ public:
     static rsl::string_view get_hash_value_hex_string(const std::uint64_t& hash);
     static rsl::string_view get_hash_value_decimal_string(const std::uint64_t& hash);
 
-    static std::uint64_t compute_hash_from_string(rsl::string_view string);
-    static std::uint64_t compute_hash_from_bytes(const void* data, std::size_t size);
+    static std::uint64_t compute_hash_from_string(rsl::string_view string) noexcept;
+    static std::uint64_t compute_hash_from_bytes(const void* data, std::size_t size) noexcept;
 private:
     const std::uint64_t name_hash;
     const std::uint64_t structure_hash;

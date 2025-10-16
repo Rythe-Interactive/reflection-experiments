@@ -7,9 +7,9 @@ namespace rythe::reflection_containers
 {
     struct reflected_variable
     {
-        rsl::hashed_string                    name;
-        rsl::dynamic_string                   current_namespace;
-        reflection_properties::acess_modifier access_modifier;
+        rsl::hashed_string                     name;
+        rsl::dynamic_string                    current_namespace;
+        reflection_properties::access_modifier access_modifier;
 
         bool is_static;
         bool is_const;
@@ -28,7 +28,7 @@ namespace rythe::reflection_containers
         reflected_variable(
             rsl::hashed_string                      name,
             rsl::dynamic_string                     current_namespace,
-            reflection_properties::acess_modifier   access_modifier,
+            reflection_properties::access_modifier  access_modifier,
             bool                                    is_static,
             bool                                    is_const,
             bool                                    is_array,
@@ -44,7 +44,7 @@ namespace rythe::reflection_containers
         reflected_variable(
             rsl::hashed_string                      name,
             rsl::dynamic_string                     current_namespace,
-            reflection_properties::acess_modifier   access_modifier,
+            reflection_properties::access_modifier  access_modifier,
             bool                                    is_static,
             bool                                    is_const,
             bool                                    is_array,
@@ -67,9 +67,9 @@ namespace rythe::reflection_containers
 
         void* get_value_ptr(void* obj);
 
-        const rsl::hashed_string&             get_name() const;
-        const rsl::dynamic_string&            get_namespace() const;
-        reflection_properties::acess_modifier get_access_modifier() const;
+        const rsl::hashed_string&              get_name() const;
+        const rsl::dynamic_string&             get_namespace() const;
+        reflection_properties::access_modifier get_access_modifier() const;
 
         bool get_is_static() const;
         bool get_is_const() const;
@@ -86,7 +86,7 @@ namespace rythe::reflection_containers
 
         void set_name(const rsl::hashed_string& n);
         void set_namespace(const rsl::dynamic_string& ns);
-        void set_access_modifier(reflection_properties::acess_modifier mod);
+        void set_access_modifier(reflection_properties::access_modifier mod);
 
         void set_is_static(bool v);
         void set_is_const(bool v);
@@ -97,8 +97,7 @@ namespace rythe::reflection_containers
         void set_offset(size_t o);
         void set_size(size_t s);
         void set_alignment(uint16_t a);
-
-        void set_type_id(const reflection_id& id);
+        
         void set_attributes(const rsl::dynamic_array<rsl::dynamic_string>& attrs);
     };
 }

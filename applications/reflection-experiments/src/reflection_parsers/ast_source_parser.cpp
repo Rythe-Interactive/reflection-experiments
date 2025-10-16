@@ -1,7 +1,5 @@
 #include "ast_source_parser.h"
 
-
-
 reflection_parsers::ast_source_parser::ast_source_parser()
 {
     index = clang_createIndex(0, 0);
@@ -36,15 +34,14 @@ void reflection_parsers::ast_source_parser::print_all_files() const
     for(const auto& element : all_files) { element.second.print(0); }
 }
 
-
 CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_file(
     CXCursor     current_cursor,
     CXCursor     parent_cursor,
     CXClientData client_data)
 {
     if(parent_cursor.kind) {}
-    
-    auto* parent_file = static_cast<compile_reflected_file*>(client_data);
+
+    auto*        parent_file = static_cast<compile_reflected_file*>(client_data);
     CXCursorKind kind = clang_getCursorKind(current_cursor);
 
     /*
@@ -85,7 +82,7 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
     CXClientData client_data)
 {
     if(parent_cursor.kind) {}
-    
+
     auto*        parent_class = static_cast<compile_reflected_class*>(client_data);
     CXCursorKind kind = clang_getCursorKind(current_cursor);
 
@@ -120,7 +117,7 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
     return CXChildVisit_Continue;
 }
 
-
+// Meant to pass temporary 
 void reflection_parsers::ast_source_parser::ast_parse_file(const std::string&& filePath, CXIndex index)
 {
     std::cout << "Parsing file path: " << filePath << '\n';
@@ -169,17 +166,17 @@ rythe::reflection_containers::reflected_variable reflection_parsers::ast_source_
     CXCursor parent = clang_getCursorSemanticParent(cursor);
     CXString parent_name = clang_getCursorSpelling(parent);
 
-    reflection_properties::acess_modifier access = {};
+    reflection_properties::access_modifier access = {};
     switch(clang_getCXXAccessSpecifier(cursor))
     {
         case CX_CXXPublic:
-            access = reflection_properties::acess_modifier::public_access;
+            access = reflection_properties::access_modifier::public_access;
             break;
         case CX_CXXProtected:
-            access = reflection_properties::acess_modifier::protected_access;
+            access = reflection_properties::access_modifier::protected_access;
             break;
         case CX_CXXPrivate:
-            access = reflection_properties::acess_modifier::private_access;
+            access = reflection_properties::access_modifier::private_access;
             break;
         case CX_CXXInvalidAccessSpecifier:
             // Debug something bad

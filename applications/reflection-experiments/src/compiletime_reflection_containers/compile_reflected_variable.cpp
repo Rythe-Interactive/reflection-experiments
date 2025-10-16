@@ -1,7 +1,5 @@
 #include "compile_reflected_variable.h"
 
-#include "../reflection_id/reflection_id.h"
-
 compile_reflected_variable::compile_reflected_variable(CXCursor cursor)
     : compile_reflected_element(get_name_from_cursor(cursor))
 {
@@ -14,8 +12,8 @@ compile_reflected_variable::compile_reflected_variable(CXCursor cursor)
     clang_disposeString(typeSpelling);
 }
 
-compile_reflected_variable::compile_reflected_variable(rsl::dynamic_string name, rsl::dynamic_string type)
-    : compile_reflected_element(name) {}
+compile_reflected_variable::compile_reflected_variable(rsl::dynamic_string name, reflection_id type)
+    : compile_reflected_element(name) { if(type.get_name_hash()) {} }
 
 compile_reflected_variable::~compile_reflected_variable() {}
 

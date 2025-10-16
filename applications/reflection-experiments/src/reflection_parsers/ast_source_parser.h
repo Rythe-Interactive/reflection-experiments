@@ -24,15 +24,14 @@ namespace reflection_parsers
     private:
         reflection_code_generator code_generator;
         CXIndex                   index;
-
-        // I'd recommend either sticking to rsl containers or std containers, I've not made my containers with STL compatibility in mind.
-        // Furthermore, why do these files need to be a unique_ptr?
+        
         std::map<std::string, compile_reflected_file> all_files;
 
         // If this function is a static function that is never needed outside ast_source_parser.cpp, then it would be best to keep
         // it as a translation unit local function. You do this by moving this function into ast_source_parser.cpp and either marking
         // it static, or by placing it into an anonymous namespace:
         // https://en.cppreference.com/w/cpp/language/storage_duration.html#Internal_linkage
+
         static CXChildVisitResult visitor_from_file(
             CXCursor     current_cursor,
             CXCursor     parent_cursor,
@@ -41,7 +40,7 @@ namespace reflection_parsers
             CXCursor     current_cursor,
             CXCursor     parent_cursor,
             CXClientData client_data);
-
+        
         // You don't want to copy strings, either use a string_view if you need temporary read access or are going to copy,
         // or use a string rvalue reference (rsl::dynamic_string&&) if you want to take ownership.
         // Generally you'd want the ownership to not transfer and thus create the copy inside the function instead.

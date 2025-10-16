@@ -7,7 +7,7 @@
 class reflection_code_generator
 {
 public:
-    rsl::dynamic_string generate_variable(rythe::reflection_containers::reflected_variable parsed_variable);
+    const rsl::dynamic_string generate_variable(rythe::reflection_containers::reflected_variable parsed_variable);
 
     reflection_code_generator();
     ~reflection_code_generator();

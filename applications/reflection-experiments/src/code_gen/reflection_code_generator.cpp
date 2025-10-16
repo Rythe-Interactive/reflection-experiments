@@ -7,7 +7,7 @@
 #include "../runtime_reflection_containers/reflected_function.h"
 #include "../runtime_reflection_containers/reflected_variable.h"
 
-rsl::dynamic_string reflection_code_generator::generate_variable(
+const rsl::dynamic_string reflection_code_generator::generate_variable(
     rythe::reflection_containers::reflected_variable parsed_variable)
 {
     std::string        pad = "    ";
@@ -23,13 +23,13 @@ rsl::dynamic_string reflection_code_generator::generate_variable(
 
     switch(parsed_variable.get_access_modifier())
     {
-        case reflection_properties::acess_modifier::public_access:
+        case reflection_properties::access_modifier::public_access:
             out << pad << "reflection_properties::acess_modifier::public_access,\n";
             break;
-        case reflection_properties::acess_modifier::protected_access:
+        case reflection_properties::access_modifier::protected_access:
             out << pad << "reflection_properties::acess_modifier::protected_access,\n";
             break;
-        case reflection_properties::acess_modifier::private_access:
+        case reflection_properties::access_modifier::private_access:
             out << pad << "reflection_properties::acess_modifier::private_access,\n";
             break;
         default:
@@ -46,8 +46,8 @@ rsl::dynamic_string reflection_code_generator::generate_variable(
     out << pad << parsed_variable.get_size() << ",\n";
     out << pad << parsed_variable.get_alignment() << ",\n";
 
-    const char* type_str = parsed_variable.get_type_id().get_type().data();
-    out << pad << "reflection_id(rsl::dynamic_string::from_string_length(" << type_str << ")),\n";
+    //const char* type_str = parsed_variable.get_type_id().get_type().data();
+    //out << pad << "reflection_id(rsl::dynamic_string::from_string_length(" << type_str << ")),\n";
 
     const auto& attributes = parsed_variable.get_attributes();
     out << pad << "rsl::dynamic_array<rsl::dynamic_string>{";

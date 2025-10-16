@@ -4,7 +4,6 @@
 
 #include "reflection_parsers/ast_source_parser.h"
 
-
 int main(int, char* argv[])
 {
     rsl::cli_parser cmdl(argv);
@@ -12,7 +11,6 @@ int main(int, char* argv[])
     // any particular reason for unordered_set?
     std::unordered_set<std::string> folders;
 
-    std::string string;
     for(auto& param : cmdl.params("fpath"))
     {
         std::cout << '\t' << param.first << " : " << param.second << '\n';

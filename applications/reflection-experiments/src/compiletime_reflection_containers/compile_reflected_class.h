@@ -19,5 +19,6 @@ public:
     compile_reflected_class(compile_reflected_class&&) noexcept = default;
     ~compile_reflected_class();
 
-    void print(int indent) const override;
+    void                print(int indent) const override;
+    rsl::dynamic_string get_string_for_structure_hash() const override;
 };

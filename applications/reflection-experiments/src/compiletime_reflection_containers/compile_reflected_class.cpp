@@ -27,3 +27,5 @@ void compile_reflected_class::print(int indent) const
     compile_reflection_container<compile_reflected_function>::print_container(indent + 1);
     compile_reflection_container<compile_reflected_variable>::print_container(indent + 1);
 }
+
+rsl::dynamic_string compile_reflected_class::get_string_for_structure_hash() const {}
