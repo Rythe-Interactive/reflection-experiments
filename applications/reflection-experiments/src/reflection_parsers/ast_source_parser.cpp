@@ -73,6 +73,8 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_file(
         default:
             break;
     }
+
+    
     return CXChildVisit_Continue;
 }
 
@@ -85,13 +87,7 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
 
     auto*        parent_class = static_cast<compile_reflected_class*>(client_data);
     CXCursorKind kind = clang_getCursorKind(current_cursor);
-
-    /*
-    CXString kind_spelling = clang_getCursorKindSpelling(kind);
-    std::cout << clang_getCString(kind_spelling) << '\n';
-
-    clang_disposeString(kind_spelling);
-    */
+    
     switch(kind)
     {
         case CXCursor_ClassDecl:
@@ -156,80 +152,4 @@ std::string_view reflection_parsers::ast_source_parser::extract_file_name(const 
     }
     else { std::cerr << "File name is empty.\n"; }
     return file_name;
-}
-
-rythe::reflection_containers::reflected_variable reflection_parsers::ast_source_parser::extract_variable(
-    CXCursor cursor)
-{
-    CXString field_name = clang_getCursorSpelling(cursor);
-
-    CXCursor parent = clang_getCursorSemanticParent(cursor);
-    CXString parent_name = clang_getCursorSpelling(parent);
-
-    reflection_properties::access_modifier access = {};
-    switch(clang_getCXXAccessSpecifier(cursor))
-    {
-        case CX_CXXPublic:
-            access = reflection_properties::access_modifier::public_access;
-            break;
-        case CX_CXXProtected:
-            access = reflection_properties::access_modifier::protected_access;
-            break;
-        case CX_CXXPrivate:
-            access = reflection_properties::access_modifier::private_access;
-            break;
-        case CX_CXXInvalidAccessSpecifier:
-            // Debug something bad
-            break;
-        default:
-            break;
-    }
-
-    CXType type = clang_getCursorType(cursor);
-
-    bool is_const = clang_isConstQualifiedType(type);
-
-    // Not sure how to do that yet
-    auto is_static = true;
-
-    auto is_array = false;
-    auto array_size = 0;
-
-    if(type.kind == CXType_ConstantArray)
-    {
-        is_array = true;
-        array_size = static_cast<int>(clang_getArraySize(type));
-    }
-
-    size_t size = clang_Type_getSizeOf(type);
-    size_t align = clang_Type_getAlignOf(type);
-
-    auto offset = (int)clang_Cursor_getOffsetOfField(cursor);
-
-    rsl::dynamic_array<rsl::dynamic_string> attributes = {};
-
-    const char* field_cstr = clang_getCString(field_name);
-    const char* parent_cstr = clang_getCString(parent_name);
-
-    CXType      cursor_type = clang_getCursorType(cursor);
-    CXString    type_spelling = clang_getTypeSpelling(cursor_type);
-    const char* type_cstr = clang_getCString(type_spelling);
-
-    clang_disposeString(type_spelling);
-    clang_disposeString(field_name);
-    clang_disposeString(parent_name);
-
-    return rythe::reflection_containers::reflected_variable(
-        rsl::hashed_string::from_string_length(field_cstr),
-        rsl::dynamic_string::from_string_length(parent_cstr),
-        access,
-        is_static,
-        is_const,
-        is_array,
-        array_size,
-        offset,
-        size,
-        align,
-        reflection_id(rsl::dynamic_string::from_string_length(type_cstr)),
-        attributes);
 }

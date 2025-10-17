@@ -6,8 +6,8 @@ compile_reflected_variable::compile_reflected_variable(CXCursor cursor)
     CXType      cursorType = clang_getCursorType(cursor);
     CXString    typeSpelling = clang_getTypeSpelling(cursorType);
     const char* type_spelling = clang_getCString(typeSpelling);
-    
-    this->type = rsl::dynamic_string::from_string_length(type_spelling);
+
+    this->type_spelling = rsl::dynamic_string::from_string_length(type_spelling);
 
     clang_disposeString(typeSpelling);
 }
@@ -19,13 +19,9 @@ compile_reflected_variable::~compile_reflected_variable() {}
 
 void compile_reflected_variable::print(int indent) const
 {
-    for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
-    std::cout << "Field name: ";
-    compile_reflected_element::print(0);
+    compile_reflected_element::print(indent + 1);
 
     for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
-    std::cout << "Type: " << this->type.data() << '\n';
+    std::cout << "Type: " << this->type_spelling.data() << '\n';
 }
-
-std::string_view compile_reflected_variable::get_string_constructor() const {}
 

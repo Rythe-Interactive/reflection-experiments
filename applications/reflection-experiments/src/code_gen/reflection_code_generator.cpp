@@ -74,7 +74,7 @@ reflection_code_generator::~reflection_code_generator() {}
 
 void reflection_code_generator::generate_reflected_file(const compile_reflected_file& compile_file)
 {
-    const rsl::string_view source_location = compile_file.get_name();
+    const rsl::string_view source_location = compile_file.get_source_location();
     std::ofstream          file(get_gen_source_file(source_location).data());
     if(!file.is_open()) { std::cout << "Could not open file " << source_location.data() << " for writing.\n"; }
 
@@ -116,7 +116,7 @@ rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflecti
 
     out << "rythe::reflection_containers::reflected_variable(\n";
 
-    const char* name = parsed_variable.get_name().data();
+    const char* name = parsed_variable.get_source_location().data();
     out << pad << "\"" << name << "\"\n";
 
     const char* name_space = parsed_variable.get_namespace().data();

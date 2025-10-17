@@ -19,7 +19,7 @@ public:
 
     void print(int indent) const override;
 
-    rsl::string_view get_name() const;
+    rsl::string_view get_source_location() const;
     
 private:
     const rsl::dynamic_string source_location;
