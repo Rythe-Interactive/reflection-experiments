@@ -58,6 +58,7 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_file(
             compile_reflected_class& reflected_class = parent_file->compile_reflection_container<
                 compile_reflected_class>::add_element(current_cursor);
             clang_visitChildren(current_cursor, visitor_from_class, &reflected_class);
+            reflected_class.set_full_hash();
             break;
         }
         case CXCursor_FieldDecl:
@@ -92,14 +93,15 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
     {
         case CXCursor_ClassDecl:
         {
-            compile_reflected_class& reflected_class = parent_class->compile_reflection_container<
-                compile_reflected_class>::add_element(current_cursor);
+            compile_reflected_class& reflected_class = parent_class->add_class(current_cursor, parent_cursor);
             clang_visitChildren(current_cursor, visitor_from_class, &reflected_class);
             break;
         }
         case CXCursor_FieldDecl:
         {
-            parent_class->compile_reflection_container<compile_reflected_variable>::add_element(current_cursor);
+            parent_class->compile_reflection_container<compile_reflected_variable>::add_element(
+                current_cursor,
+                parent_cursor);
             break;
         }
         case CXCursor_FunctionDecl:

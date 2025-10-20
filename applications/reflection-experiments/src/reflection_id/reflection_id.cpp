@@ -22,6 +22,11 @@ rsl::id_type  reflection_id::get_name_hash() const { return name_hash; }
 
 rsl::id_type reflection_id::get_structure_hash() const { return structure_hash; }
 rsl::id_type reflection_id::get_full_hash() const { return full_hash; }
+
+void reflection_id::set_name_hash(rsl::id_type hash) { name_hash = hash; }
+void reflection_id::set_structure_hash(rsl::id_type hash) { structure_hash = hash; }
+void reflection_id::set_full_hash(rsl::id_type hash) { full_hash = hash; }
+
 bool         reflection_id::operator==(const reflection_id& other) const noexcept
 {
     return (name_hash == other.name_hash) && (structure_hash == other.structure_hash);
@@ -62,7 +67,7 @@ rsl::id_type reflection_id::generate_structure_hash(std::vector<std::pair<std::s
     for(const auto& member : members)
     {
         rsl::id_type member_hash = member.second;
-        rsl::combine_hash(rsl::internal::hash::default_seed, hash, member_hash);
+        hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, member_hash);
     }
     return hash;
 }

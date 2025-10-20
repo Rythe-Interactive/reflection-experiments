@@ -1,15 +1,20 @@
 #include "compile_reflected_variable.h"
 
-compile_reflected_variable::compile_reflected_variable(CXCursor cursor)
+compile_reflected_variable::compile_reflected_variable(CXCursor& cursor, CXCursor& parent)
     : compile_reflected_element(get_name_from_cursor(cursor))
 {
-    CXType      cursorType = clang_getCursorType(cursor);
-    CXString    typeSpelling = clang_getTypeSpelling(cursorType);
-    const char* type_spelling = clang_getCString(typeSpelling);
+    CXType parent_type = clang_getCursorType(parent);
+
+    CXType      cursor_type = clang_getCursorType(cursor);
+    CXString    type_spelling_string = clang_getTypeSpelling(cursor_type);
+    const char* type_spelling = clang_getCString(type_spelling_string);
 
     this->type_spelling = rsl::dynamic_string::from_string_length(type_spelling);
 
-    clang_disposeString(typeSpelling);
+    long long offset_bits = clang_Type_getOffsetOf(parent_type, type_spelling);
+    this->offset = static_cast<rsl::size_type>(offset_bits);
+
+    clang_disposeString(type_spelling_string);
 }
 
 compile_reflected_variable::compile_reflected_variable(rsl::dynamic_string name, reflection_id type)

@@ -13,13 +13,19 @@ struct compile_reflected_class
 {
 public:
     rsl::dynamic_string type_spelling;
+    rsl::size_type      offset;
 
-    compile_reflected_class(CXCursor cursor);
+    compile_reflected_class(const CXCursor& cursor, const CXCursor& parent);
     compile_reflected_class(const compile_reflected_class&) = default;
     compile_reflected_class(compile_reflected_class&&) noexcept = default;
     ~compile_reflected_class();
 
+    compile_reflected_class&    add_class(const CXCursor& cursor, const CXCursor& parent);
+    compile_reflected_variable& add_variable(const CXCursor& cursor, const CXCursor& parent);
+    compile_reflected_function& add_function(const CXCursor& cursor, const CXCursor& parent);
+    
     void print(int indent) const override;
 private:
-    
+    rsl::id_type compute_own_structure_hash() noexcept override;
+    rsl::id_type compute_container_structure_hash() noexcept override;
 };

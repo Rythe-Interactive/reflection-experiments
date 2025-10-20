@@ -28,6 +28,10 @@ public:
     rsl::id_type get_structure_hash() const;
     rsl::id_type get_full_hash() const;
 
+    void set_name_hash(rsl::id_type hash);
+    void set_structure_hash(rsl::id_type hash);
+    void set_full_hash(rsl::id_type hash);
+    
     bool operator==(const reflection_id& other) const noexcept;
     bool operator!=(const reflection_id& other) const noexcept;
 

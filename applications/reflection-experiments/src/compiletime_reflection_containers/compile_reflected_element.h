@@ -17,12 +17,14 @@ public:
 
     virtual void print(int indent) const;
 
-    virtual void finalize_creating_id() noexcept;
+    void set_full_hash() noexcept;
 private:
 protected:
-    rsl::id_type compute_structure_hash();
-    rsl::id_type compute_name_hash();
+    rsl::id_type compute_structure_hash() noexcept;
+    rsl::id_type compute_name_hash() const noexcept;
 
-    
-    static rsl::dynamic_string get_name_from_cursor(CXCursor& cursor);
+    virtual rsl::id_type compute_own_structure_hash() noexcept;
+    virtual rsl::id_type compute_container_structure_hash() noexcept;
+
+    static rsl::dynamic_string get_name_from_cursor(const CXCursor& cursor);
 };

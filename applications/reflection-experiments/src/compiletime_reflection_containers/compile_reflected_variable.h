@@ -9,8 +9,9 @@ struct compile_reflected_variable : public compile_reflected_element
 {
 public:
     rsl::dynamic_string type_spelling;
+    rsl::size_type      offset;
 
-    compile_reflected_variable(CXCursor cursor);
+    compile_reflected_variable(CXCursor& cursor, CXCursor& parent);
     compile_reflected_variable(rsl::dynamic_string name, reflection_id type);
     ~compile_reflected_variable();
     compile_reflected_variable(const compile_reflected_variable& other) = default;
