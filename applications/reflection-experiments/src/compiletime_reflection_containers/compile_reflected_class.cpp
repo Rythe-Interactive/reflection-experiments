@@ -1,6 +1,6 @@
 #include "compile_reflected_class.h"
 
-compile_reflected_class::compile_reflected_class(CXCursor& cursor, CXCursor& parent)
+compile_reflected_class::compile_reflected_class(const CXCursor& cursor, const CXCursor& parent)
     : compile_reflected_element(get_name_from_cursor(cursor))
 {
     this->compile_reflection_container<compile_reflected_class>::verify_typename();

@@ -53,7 +53,6 @@ reflection_id::reflection_id() noexcept
   , structure_hash(0)
   , full_hash(0) {}
 
-// Vector is not sorted before getting to this function
 rsl::id_type reflection_id::generate_structure_hash(std::vector<std::pair<std::size_t, rsl::id_type>>& members) noexcept
 {
     std::ranges::sort(

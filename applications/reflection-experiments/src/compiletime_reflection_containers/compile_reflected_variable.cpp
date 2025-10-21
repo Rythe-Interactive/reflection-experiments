@@ -1,6 +1,6 @@
 #include "compile_reflected_variable.h"
 
-compile_reflected_variable::compile_reflected_variable(CXCursor& cursor, CXCursor& parent)
+compile_reflected_variable::compile_reflected_variable(const CXCursor& cursor, const CXCursor& parent)
     : compile_reflected_element(get_name_from_cursor(cursor))
 {
     CXType parent_type = clang_getCursorType(parent);

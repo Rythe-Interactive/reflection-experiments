@@ -1,7 +1,7 @@
 #include "compile_reflected_function.h"
 
 
-compile_reflected_function::compile_reflected_function(CXCursor& cursor, CXCursor& parent)
+compile_reflected_function::compile_reflected_function(const CXCursor& cursor, const CXCursor& parent)
     : compile_reflected_element(get_name_from_cursor(cursor))
 {
     CXType      cursorType = clang_getCursorType(cursor);
