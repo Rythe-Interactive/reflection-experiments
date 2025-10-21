@@ -12,7 +12,7 @@ public:
     rsl::size_type      offset;
 
     compile_reflected_variable(CXCursor& cursor, CXCursor& parent);
-    compile_reflected_variable(rsl::dynamic_string name, reflection_id type);
+    compile_reflected_variable(rsl::dynamic_string name, reflection_id type, rsl::size_type offset);
     ~compile_reflected_variable();
     compile_reflected_variable(const compile_reflected_variable& other) = default;
     compile_reflected_variable(compile_reflected_variable&& other) noexcept = default;

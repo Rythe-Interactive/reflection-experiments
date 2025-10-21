@@ -10,7 +10,7 @@ template<typename T>
 class compile_reflection_container
 {
 public:
-    T& add_element(const CXCursor& cursor, const CXCursor& parent);
+    T& add_element(CXCursor& cursor, CXCursor& parent);
 
     void print_container(int indent) const;
 
@@ -23,10 +23,11 @@ public:
 protected:
     std::vector<std::unique_ptr<T>> container;
 
-    void sort_container(std::function<bool(std::unique_ptr<T>, std::unique_ptr<T>)> comparator);
+    template<typename Comparator>
+    void sort_container(Comparator&& comparator);
 
-    static bool sort_by_name_comparator(std::unique_ptr<T> a, std::unique_ptr<T> b);
-    static bool sort_by_offset_comparator(std::unique_ptr<T> a, std::unique_ptr<T> b);
+    static bool sort_by_name_comparator(const std::unique_ptr<T>& a, const std::unique_ptr<T>& b);
+    static bool sort_by_offset_comparator(const std::unique_ptr<T>& a, const std::unique_ptr<T>& b);
 };
 
 #include "compile_reflection_container.inl"

@@ -48,7 +48,7 @@ rsl::id_type compile_reflected_element::compute_own_structure_hash() noexcept { 
 
 rsl::id_type compile_reflected_element::compute_container_structure_hash() noexcept { return 0; }
 
-rsl::dynamic_string compile_reflected_element::get_name_from_cursor(const CXCursor& cursor)
+rsl::dynamic_string compile_reflected_element::get_name_from_cursor(CXCursor& cursor)
 {
     CXString    field_name = clang_getCursorSpelling(cursor);
     const char* field_spelling = clang_getCString(field_name);

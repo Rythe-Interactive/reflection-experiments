@@ -26,5 +26,5 @@ protected:
     virtual rsl::id_type compute_own_structure_hash() noexcept;
     virtual rsl::id_type compute_container_structure_hash() noexcept;
 
-    static rsl::dynamic_string get_name_from_cursor(const CXCursor& cursor);
+    static rsl::dynamic_string get_name_from_cursor(CXCursor& cursor);
 };

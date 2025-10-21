@@ -7,18 +7,23 @@ compile_reflected_variable::compile_reflected_variable(CXCursor& cursor, CXCurso
 
     CXType      cursor_type = clang_getCursorType(cursor);
     CXString    type_spelling_string = clang_getTypeSpelling(cursor_type);
-    const char* type_spelling = clang_getCString(type_spelling_string);
+    const char* type_spelling_var = clang_getCString(type_spelling_string);
 
-    this->type_spelling = rsl::dynamic_string::from_string_length(type_spelling);
+    this->type_spelling = rsl::dynamic_string::from_string_length(type_spelling_var);
 
-    long long offset_bits = clang_Type_getOffsetOf(parent_type, type_spelling);
-    this->offset = static_cast<rsl::size_type>(offset_bits);
-
+    long long offset_bits = clang_Type_getOffsetOf(parent_type, name.data());
+    if(offset_bits < 0) { std::cout << "Offset bits are less than 0: " << offset_bits << '\n'; }
+    this->offset = static_cast<rsl::size_type>(offset_bits) / 8;
+    
     clang_disposeString(type_spelling_string);
 }
 
-compile_reflected_variable::compile_reflected_variable(rsl::dynamic_string name, reflection_id type)
-    : compile_reflected_element(name) { if(type.get_name_hash()) {} }
+compile_reflected_variable::compile_reflected_variable(
+    rsl::dynamic_string name,
+    reflection_id       type,
+    rsl::size_type      offset)
+    : compile_reflected_element(name)
+  , offset(offset) { if(type.get_name_hash()) {} }
 
 compile_reflected_variable::~compile_reflected_variable() {}
 
@@ -28,5 +33,8 @@ void compile_reflected_variable::print(int indent) const
 
     for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
     std::cout << "Type: " << this->type_spelling.data() << '\n';
+
+    for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
+    std::cout << "Offset in bytes: " << this->offset << '\n';
 }
 

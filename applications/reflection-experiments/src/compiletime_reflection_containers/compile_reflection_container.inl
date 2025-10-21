@@ -1,7 +1,6 @@
 #pragma once
-// TODO: Make it so that you do not need to call specific base class to add_element();  
 template<typename T>
-T& compile_reflection_container<T>::add_element(const CXCursor& cursor, const CXCursor& parent)
+T& compile_reflection_container<T>::add_element(CXCursor& cursor, CXCursor& parent)
 {
     container.emplace_back(std::make_unique<T>(cursor, parent));
     return *container.back();
@@ -39,18 +38,18 @@ rsl::id_type compile_reflection_container<T>::get_container_hash() const noexcep
 }
 
 template<typename T>
-void compile_reflection_container<T>::sort_container(
-    std::function<bool (std::unique_ptr<T>, std::unique_ptr<T>)> comparator)
+template<typename Comparator>
+void compile_reflection_container<T>::sort_container(Comparator&& comparator)
 {
-    std::ranges::sort(container, comparator);
+    std::ranges::sort(container, std::forward<Comparator>(comparator));
 }
 
 template<typename T>
-bool compile_reflection_container<T>::sort_by_name_comparator(std::unique_ptr<T> a, std::unique_ptr<T> b)
+bool compile_reflection_container<T>::sort_by_name_comparator(const std::unique_ptr<T>& a, const std::unique_ptr<T>& b)
 {
-    rsl::dynamic_string a_string = a.name;
-    rsl::dynamic_string b_string = b.name;
-    std::size_t         min_length = (a_string.size() < b_string.size()) ? a_string.size() : b_string.size();
+    rsl::dynamic_string a_string = a->name;
+    rsl::dynamic_string b_string = b->name;
+    const std::size_t   min_length = a_string.size() < b_string.size() ? a_string.size() : b_string.size();
 
     for(std::size_t i = 0; i < min_length; ++i)
     {
@@ -61,7 +60,9 @@ bool compile_reflection_container<T>::sort_by_name_comparator(std::unique_ptr<T>
 }
 
 template<typename T>
-bool compile_reflection_container<T>::sort_by_offset_comparator(std::unique_ptr<T> a, std::unique_ptr<T> b)
+bool compile_reflection_container<T>::sort_by_offset_comparator(
+    const std::unique_ptr<T>& a,
+    const std::unique_ptr<T>& b)
 {
-    return a.offset < b.offset;
+    return a->offset < b->offset;
 }
