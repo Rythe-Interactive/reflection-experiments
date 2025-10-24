@@ -1,19 +1,20 @@
 #include "reflection_code_generator.h"
-
+#include "D:/MyProjects/reflection-experiments/applications/reflection-experiments/src/target/test.hpp"
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
 
 #include "../runtime_reflection_containers/reflected_function.h"
-#include "../runtime_reflection_containers/reflected_variable.h"
+#include "../runtime_reflection_containers/runtime_reflected_variable.h"
 
 const rsl::dynamic_string reflection_code_generator::generate_variable(
-    rythe::reflection_containers::reflected_variable parsed_variable)
+    [[maybe_unused]] runtime_reflected_variable parsed_variable)
 {
+    /*
     std::string        pad = "    ";
     std::ostringstream out;
 
-    out << "rythe::reflection_containers::reflected_variable(\n";
+    out << "rythe::reflection_containers::runtime_reflected_variable(\n";
 
     const char* name = parsed_variable.get_name().data();
     out << pad << "\"" << name << "\"\n";
@@ -52,13 +53,14 @@ const rsl::dynamic_string reflection_code_generator::generate_variable(
     const auto& attributes = parsed_variable.get_attributes();
     out << pad << "rsl::dynamic_array<rsl::dynamic_string>{";
     if(!attributes.empty()) { out << "\n"; }
-    /*for (int i = 0; i < attributes.size(); ++i) {
+    for (int i = 0; i < attributes.size(); ++i) {
         const char* attribute = attributes[i].data();
         out << pad << "    rsl::dynamic_string::from_buffer(" 
             << attribute << ", " << (attribute ? attributes.size() : 0) << ")";
         if (i + 1 < attributes) out << ",";
         out << "\n";
-    }*/
+    }
+    
     if(!attributes.empty()) { out << pad; }
     out << "}\n";
 
@@ -66,6 +68,8 @@ const rsl::dynamic_string reflection_code_generator::generate_variable(
 
     std::string string = out.str();
     return rsl::dynamic_string::from_buffer(string.c_str(), string.size());
+    */
+    return {};
 }
 
 reflection_code_generator::reflection_code_generator() {}
@@ -78,13 +82,11 @@ void reflection_code_generator::generate_reflected_file(const compile_reflected_
     std::ofstream          file(get_gen_source_file(source_location).data());
     if(!file.is_open()) { std::cout << "Could not open file " << source_location.data() << " for writing.\n"; }
 
-    file << "#include \"reflected_variable.hpp\"\n";
+    file << "#include \"runtime_reflected_variable.hpp\"\n";
     file << "using namespace rythe::reflection_containers;\n\n";
-    file << "void generate_variable(rythe::reflection_containers::reflected_variable parsed_variable) {\n";
+    file << "void generate_variable(rythe::reflection_containers::runtime_reflected_variable parsed_variable) {\n";
     //file << "    auto var = " << generate_variable(parsed_variable).data() << ";\n";
     file << "}\n";
-
-    
 }
 
 rsl::dynamic_string reflection_code_generator::get_gen_source_file(rsl::string_view source_location)
@@ -109,12 +111,12 @@ rsl::dynamic_string reflection_code_generator::get_gen_source_file(rsl::string_v
 
 
 /*
-rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflection_containers::reflected_variable parsed_variable) {
+rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflection_containers::runtime_reflected_variable parsed_variable) {
 
     std::string pad = "    ";
     std::ostringstream out;
 
-    out << "rythe::reflection_containers::reflected_variable(\n";
+    out << "rythe::reflection_containers::runtime_reflected_variable(\n";
 
     const char* name = parsed_variable.get_source_location().data();
     out << pad << "\"" << name << "\"\n";
@@ -168,16 +170,16 @@ rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflecti
 
 
 void reflection_code_generator::generate_reflected_variable_file(
-    const rythe::reflection_containers::reflected_variable& parsed_variable,
-    const std::string&                                      outFile)
+    const runtime_reflected_variable& parsed_variable,
+    const std::string&                outFile)
 {
     std::cout << "reflection_code_generator::generate_reflected_variable_file\n";
     std::ofstream file(outFile);
     if(!file.is_open()) { std::cout << "Could not open file " << outFile << " for writing.\n"; }
 
-    file << "#include \"reflected_variable.hpp\"\n";
+    file << "#include \"runtime_reflected_variable.hpp\"\n";
     file << "using namespace rythe::reflection_containers;\n\n";
-    file << "void generate_variable(rythe::reflection_containers::reflected_variable parsed_variable) {\n";
+    file << "void generate_variable(rythe::reflection_containers::runtime_reflected_variable parsed_variable) {\n";
     file << "    auto var = " << generate_variable(parsed_variable).data() << ";\n";
     file << "}\n";
 }

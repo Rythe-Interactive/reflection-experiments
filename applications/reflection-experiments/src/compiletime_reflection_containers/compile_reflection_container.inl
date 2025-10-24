@@ -26,14 +26,15 @@ void compile_reflection_container<T>::verify_typename() const
 template<typename T>
 rsl::id_type compile_reflection_container<T>::get_container_hash() const noexcept
 {
+    if(container.size() == 0) { return SIZE_MAX; }
+
     rsl::id_type hash = rsl::internal::hash::default_seed;
     for(const auto& element : container)
     {
         auto element_object = static_cast<compile_reflected_element*>(element.get());
-        if(!element_object) { std::cout << "Reflected container does not store reflected elements." << '\n'; }
         hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, element_object->id.get_structure_hash());
     }
-
+    
     return hash;
 }
 

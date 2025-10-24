@@ -4,7 +4,7 @@
 #include <map>
 #include <unordered_set>
 #include "../code_gen/reflection_code_generator.h"
-#include "../runtime_reflection_containers/reflected_variable.h"
+#include "../runtime_reflection_containers/runtime_reflected_variable.h"
 #include  "../compiletime_reflection_containers/compile_reflected_file.h"
 #include  "../compiletime_reflection_containers/compile_reflected_class.h"
 

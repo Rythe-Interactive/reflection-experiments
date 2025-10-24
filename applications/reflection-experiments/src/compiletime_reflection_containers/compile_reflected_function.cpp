@@ -7,8 +7,8 @@ compile_reflected_function::compile_reflected_function(const CXCursor& cursor, c
     CXType      cursorType = clang_getCursorType(cursor);
     CXString    typeSpelling = clang_getTypeSpelling(cursorType);
     const char* type_spelling = clang_getCString(typeSpelling);
-    
-    this->type = rsl::dynamic_string::from_string_length(type_spelling);
+
+    this->type_spelling = rsl::dynamic_string::from_string_length(type_spelling);
     
     clang_disposeString(typeSpelling);
 
@@ -22,5 +22,5 @@ void compile_reflected_function::print(int indent) const
     compile_reflected_element::print(indent + 1);
 
     for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
-    std::cout << "Type: " << this->type.data() << '\n';
+    std::cout << "Type: " << this->type_spelling.data() << '\n';
 }

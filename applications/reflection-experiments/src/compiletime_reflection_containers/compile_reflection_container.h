@@ -11,7 +11,7 @@ class compile_reflection_container
 {
 public:
     T& add_element(const CXCursor& cursor, const CXCursor& parent);
-
+    
     void print_container(int indent) const;
 
     // Need to me manually called in the owner class.

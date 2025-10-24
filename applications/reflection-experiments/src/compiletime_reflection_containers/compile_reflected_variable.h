@@ -18,4 +18,6 @@ public:
     compile_reflected_variable(compile_reflected_variable&& other) noexcept = default;
     
     void print(int indent) const override;
+private:
+    rsl::id_type compute_own_structure_hash() noexcept override;
 };

@@ -11,9 +11,9 @@
 #include "rsl/impl/util/hash.hpp"
 
 struct reflection_id
-{
+{   
 public:
-    reflection_id(rsl::string_view name, std::vector<std::pair<std::size_t, rsl::id_type>>& members) noexcept;
+    reflection_id(rsl::id_type name_hash, rsl::id_type structure_hash, rsl::id_type full_hash) noexcept;
 
     reflection_id(const reflection_id&) = default;
     reflection_id(reflection_id&&) = default;
@@ -35,6 +35,8 @@ public:
     bool operator==(const reflection_id& other) const noexcept;
     bool operator!=(const reflection_id& other) const noexcept;
 
+    void print(int indent) const;
+    
     static rsl::string_view get_hash_value_hex_string(const rsl::id_type& hash);
     static rsl::string_view get_hash_value_decimal_string(const rsl::id_type& hash);
     
@@ -44,6 +46,4 @@ private:
     rsl::id_type name_hash;
     rsl::id_type structure_hash;
     rsl::id_type full_hash;
-
-    static rsl::id_type generate_structure_hash(std::vector<std::pair<std::size_t, rsl::id_type>>& members) noexcept;
 };

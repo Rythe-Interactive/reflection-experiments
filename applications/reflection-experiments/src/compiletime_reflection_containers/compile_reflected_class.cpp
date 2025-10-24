@@ -9,17 +9,9 @@ compile_reflected_class::compile_reflected_class(const CXCursor& cursor, const C
 
     CXType parent_type = clang_getCursorType(parent);
 
-    CXType      cursor_type = clang_getCursorType(cursor);
-    CXString    type_spelling_string = clang_getTypeSpelling(cursor_type);
-    const char* type_spelling_var = clang_getCString(type_spelling_string);
-
-    this->type_spelling = rsl::dynamic_string::from_string_length(type_spelling_var);
-
     long long offset_bits = clang_Type_getOffsetOf(parent_type, name.data());
     if(offset_bits < 0) { std::cout << "Offset bits are less than 0: " << offset_bits << '\n'; }
     this->offset = static_cast<rsl::size_type>(offset_bits);
-    
-    clang_disposeString(type_spelling_string);
 }
 
 compile_reflected_class::~compile_reflected_class() {}
@@ -44,9 +36,6 @@ void compile_reflected_class::print(int indent) const
     compile_reflected_element::print(indent + 1);
 
     for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
-    std::cout << "Type: " << this->name.data() << '\n';
-
-    for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
     std::cout << "Offset in bytes: " << this->offset << '\n';
     
     compile_reflection_container<compile_reflected_class>::print_container(indent + 1);
@@ -56,12 +45,12 @@ void compile_reflected_class::print(int indent) const
 
 rsl::id_type compile_reflected_class::compute_own_structure_hash() noexcept
 {
-    return rsl::combine_hash(
-        rsl::internal::hash::default_seed,
-        rsl::internal::hash::default_seed,
-        rsl::hash_string(type_spelling));
+    return SIZE_MAX;
 }
 
+// This order should be always deterministic.
+// Embedded classes -> functions -> variables.
+// Important because same input should produce same hash.
 rsl::id_type compile_reflected_class::compute_container_structure_hash() noexcept
 {
     rsl::id_type hash = rsl::internal::hash::default_seed;
@@ -70,19 +59,31 @@ rsl::id_type compile_reflected_class::compute_container_structure_hash() noexcep
         &compile_reflection_container<compile_reflected_class>::sort_by_offset_comparator);
     rsl::id_type class_container_hash = this->compile_reflection_container<
         compile_reflected_class>::get_container_hash();
-    if(hash != 0) { hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, class_container_hash); }
+
+    if(class_container_hash != SIZE_MAX)
+    {
+        hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, class_container_hash);
+    }
 
     this->compile_reflection_container<compile_reflected_variable>::sort_container(
         &compile_reflection_container<compile_reflected_variable>::sort_by_offset_comparator);
     rsl::id_type variable_container_hash = this->compile_reflection_container<
         compile_reflected_variable>::get_container_hash();
-    if(hash != 0) { hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, variable_container_hash); }
+
+    if(variable_container_hash != SIZE_MAX)
+    {
+        hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, variable_container_hash);
+    }
 
     this->compile_reflection_container<compile_reflected_function>::sort_container(
         &compile_reflection_container<compile_reflected_function>::sort_by_name_comparator);
     rsl::id_type function_container_hash = this->compile_reflection_container<
         compile_reflected_function>::get_container_hash();
-    if(hash != 0) { hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, function_container_hash); }
+
+    if(function_container_hash != SIZE_MAX)
+    {
+        hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, function_container_hash);
+    }
 
     return hash;
 }

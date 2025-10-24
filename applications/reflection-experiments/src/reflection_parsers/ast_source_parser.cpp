@@ -70,7 +70,9 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_file(
         }
         case CXCursor_FunctionDecl:
         {
-            std::cout << "Indeed a function" << '\n';
+            /*compile_reflected_function& function = parent_file->compile_reflection_container<
+                compile_reflected_function>::add_element(current_cursor, parent_cursor);
+            function.set_full_hash();*/
             break;
         }
         default:

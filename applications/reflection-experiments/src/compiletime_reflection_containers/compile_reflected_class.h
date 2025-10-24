@@ -12,7 +12,6 @@ struct compile_reflected_class
       public compile_reflection_container<compile_reflected_function>
 {
 public:
-    rsl::dynamic_string type_spelling;
     rsl::size_type      offset;
 
     compile_reflected_class(const CXCursor& cursor, const CXCursor& parent);

@@ -16,8 +16,7 @@ void compile_reflected_element::print(int indent) const
     for(auto i = 0; i < indent; i++) { std::cout << ' '; }
     std::cout << "Name: " << this->name.data() << '\n';
 
-    for(auto i = 0; i < indent; i++) { std::cout << ' '; }
-    std::cout << "Reflection hash: " << this->id.get_full_hash() << '\n';
+    id.print(indent);
 }
 void compile_reflected_element::set_full_hash() noexcept
 {
@@ -36,17 +35,20 @@ rsl::id_type compile_reflected_element::compute_structure_hash() noexcept
     rsl::id_type hash = rsl::internal::hash::default_seed;
 
     rsl::id_type own_hash = compute_own_structure_hash();
-    if(own_hash != 0) { hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, own_hash); }
+    if(own_hash != SIZE_MAX) { hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, own_hash); }
 
     rsl::id_type container_hash = compute_container_structure_hash();
-    if(container_hash != 0) { hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, container_hash); }
+    if(container_hash != SIZE_MAX)
+    {
+        hash = rsl::combine_hash(rsl::internal::hash::default_seed, hash, container_hash);
+    }
 
     return hash;
 }
 
-rsl::id_type compile_reflected_element::compute_own_structure_hash() noexcept { return 0; }
+rsl::id_type compile_reflected_element::compute_own_structure_hash() noexcept { return SIZE_MAX; }
 
-rsl::id_type compile_reflected_element::compute_container_structure_hash() noexcept { return 0; }
+rsl::id_type compile_reflected_element::compute_container_structure_hash() noexcept { return SIZE_MAX; }
 
 rsl::dynamic_string compile_reflected_element::get_name_from_cursor(const CXCursor& cursor)
 {

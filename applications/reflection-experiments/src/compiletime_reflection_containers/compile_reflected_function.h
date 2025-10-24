@@ -8,7 +8,7 @@
 struct compile_reflected_function : public compile_reflected_element
 {
 public:
-    rsl::dynamic_string type;
+    rsl::dynamic_string type_spelling;
 
     compile_reflected_function(const CXCursor& cursor, const CXCursor& parent);
     compile_reflected_function(const compile_reflected_function& other) = default;

@@ -3,9 +3,30 @@
 #include "../reflection_properties/access_modifier.h"
 #include "../reflection_id/reflection_id.h"
 
+
+struct runtime_reflected_variable
+{
+public:
+    runtime_reflected_variable(
+        rsl::dynamic_string&& name,
+        reflection_id&&       id,
+        rsl::size_type&&      offset,
+        rsl::dynamic_string&& type_spelling);
+
+    rsl::dynamic_string name;
+    reflection_id       id;
+    rsl::size_type      offset;
+    rsl::dynamic_string type_spelling;
+};
+
+
+
+
+
+/*
 namespace rythe::reflection_containers
 {
-    struct reflected_variable
+    struct runtime_reflected_variable
     {
         rsl::hashed_string                     name;
         rsl::dynamic_string                    current_namespace;
@@ -25,7 +46,7 @@ namespace rythe::reflection_containers
 
         rsl::dynamic_array<rsl::dynamic_string> attributes;
 
-        reflected_variable(
+        runtime_reflected_variable(
             rsl::hashed_string                      name,
             rsl::dynamic_string                     current_namespace,
             reflection_properties::access_modifier  access_modifier,
@@ -41,7 +62,7 @@ namespace rythe::reflection_containers
 
 
         template<typename T>
-        reflected_variable(
+        runtime_reflected_variable(
             rsl::hashed_string                      name,
             rsl::dynamic_string                     current_namespace,
             reflection_properties::access_modifier  access_modifier,
@@ -101,3 +122,4 @@ namespace rythe::reflection_containers
         void set_attributes(const rsl::dynamic_array<rsl::dynamic_string>& attrs);
     };
 }
+*/

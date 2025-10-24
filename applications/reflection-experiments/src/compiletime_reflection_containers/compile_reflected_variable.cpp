@@ -38,3 +38,10 @@ void compile_reflected_variable::print(int indent) const
     std::cout << "Offset in bytes: " << this->offset << '\n';
 }
 
+rsl::id_type compile_reflected_variable::compute_own_structure_hash() noexcept
+{
+    return rsl::combine_hash(
+        rsl::internal::hash::default_seed,
+        rsl::internal::hash::default_seed,
+        rsl::hash_string(type_spelling));
+}
