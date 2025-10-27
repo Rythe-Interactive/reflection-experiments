@@ -5,10 +5,7 @@
 #include "../reflection_properties/access_modifier.h"
 #include "../reflection_id/reflection_id.h"
 
-
-namespace rythe::reflection_containers
-{
-    struct reflected_function
+struct runtime_reflected_function
     {
     private:
         rsl::hashed_string                     name;
@@ -24,7 +21,7 @@ namespace rythe::reflection_containers
         rsl::dynamic_array<reflection_id>       parameters;
         rsl::dynamic_array<rsl::dynamic_string> attributes;
     public:
-        reflected_function(
+        runtime_reflected_function(
             rsl::hashed_string                      name,
             rsl::dynamic_string                     current_namespace,
             reflection_properties::access_modifier  access_modifier,
@@ -60,4 +57,3 @@ namespace rythe::reflection_containers
 
         void* get_value_ptr(void* obj);
     };
-}

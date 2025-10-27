@@ -168,7 +168,6 @@ rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflecti
 }
 */
 
-
 void reflection_code_generator::generate_reflected_variable_file(
     const runtime_reflected_variable& parsed_variable,
     const std::string&                outFile)
