@@ -1,5 +1,12 @@
 #pragma once
 template<typename T>
+T& compile_reflection_container<T>::add_element(const CXCursor& cursor)
+{
+    container.emplace_back(std::make_unique<T>(cursor));
+    return *container.back();
+}
+
+template<typename T>
 T& compile_reflection_container<T>::add_element(const CXCursor& cursor, const CXCursor& parent)
 {
     container.emplace_back(std::make_unique<T>(cursor, parent));

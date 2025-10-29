@@ -27,6 +27,7 @@ bool reflection_id::operator==(const reflection_id& other) const noexcept
 }
 
 bool reflection_id::operator!=(const reflection_id& other) const noexcept { return !(*this == other); }
+
 void reflection_id::print(int indent) const
 {
     for(auto i = 0; i < indent; i++) { std::cout << ' '; }
@@ -39,6 +40,7 @@ void reflection_id::print(int indent) const
     std::cout << "Structure hash: " << this->get_structure_hash() << '\n';
 }
 
+// TODO: returns dangling string view. FIX
 rsl::string_view reflection_id::get_hash_value_hex_string(const rsl::id_type& hash)
 {
     std::stringstream result;
@@ -46,6 +48,7 @@ rsl::string_view reflection_id::get_hash_value_hex_string(const rsl::id_type& ha
     return rsl::string_view::from_buffer(result.str().data(), result.str().size());
 }
 
+// TODO: returns dangling string view. FIX
 rsl::string_view reflection_id::get_hash_value_decimal_string(const rsl::id_type& hash)
 {
     std::stringstream result;

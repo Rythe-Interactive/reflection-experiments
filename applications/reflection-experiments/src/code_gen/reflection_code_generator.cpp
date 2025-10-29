@@ -4,7 +4,6 @@
 #include <iostream>
 #include <stdio.h>
 
-#include "../runtime_reflection_containers/reflected_function.h"
 #include "../runtime_reflection_containers/runtime_reflected_variable.h"
 
 const rsl::dynamic_string reflection_code_generator::generate_variable(

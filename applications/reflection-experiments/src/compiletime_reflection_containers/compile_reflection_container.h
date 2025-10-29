@@ -10,6 +10,7 @@ template<typename T>
 class compile_reflection_container
 {
 public:
+    T& add_element(const CXCursor& cursor);
     T& add_element(const CXCursor& cursor, const CXCursor& parent);
     
     void print_container(int indent) const;

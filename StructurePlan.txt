@@ -32,5 +32,10 @@ Need to add a way to manually add reflections.
 
 buffer_string,dynamic string
 
+Need to include namespace into strings
 
 For choices: Hash function, hash structure, compile vs runtime containers
+
+For choices, where to store runtime reflection data - BSS vs Heap vs Stack
+
+Names are made from recursive parents. No runtime reflected namespaces objects.

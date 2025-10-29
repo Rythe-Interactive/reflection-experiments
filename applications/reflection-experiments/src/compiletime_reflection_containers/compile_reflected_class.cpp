@@ -1,24 +1,18 @@
 #include "compile_reflected_class.h"
 
-compile_reflected_class::compile_reflected_class(const CXCursor& cursor, const CXCursor& parent)
+compile_reflected_class::compile_reflected_class(const CXCursor& cursor)
     : compile_reflected_element(get_name_from_cursor(cursor))
 {
     this->compile_reflection_container<compile_reflected_class>::verify_typename();
     this->compile_reflection_container<compile_reflected_variable>::verify_typename();
     this->compile_reflection_container<compile_reflected_function>::verify_typename();
-
-    CXType parent_type = clang_getCursorType(parent);
-
-    long long offset_bits = clang_Type_getOffsetOf(parent_type, name.data());
-    if(offset_bits < 0) { std::cout << "Offset bits are less than 0: " << offset_bits << '\n'; }
-    this->offset = static_cast<rsl::size_type>(offset_bits);
 }
 
 compile_reflected_class::~compile_reflected_class() {}
 
-compile_reflected_class& compile_reflected_class::add_class(CXCursor& cursor, CXCursor& parent)
+compile_reflected_class& compile_reflected_class::add_class(CXCursor& cursor)
 {
-    return this->compile_reflection_container<compile_reflected_class>::add_element(cursor, parent);
+    return this->compile_reflection_container<compile_reflected_class>::add_element(cursor);
 }
 
 compile_reflected_variable& compile_reflected_class::add_variable(CXCursor& cursor, CXCursor& parent)
@@ -34,9 +28,6 @@ compile_reflected_function& compile_reflected_class::add_function(CXCursor& curs
 void compile_reflected_class::print(int indent) const
 {
     compile_reflected_element::print(indent + 1);
-
-    for(auto i = 0; i < indent + 1; i++) { std::cout << ' '; }
-    std::cout << "Offset in bytes: " << this->offset << '\n';
     
     compile_reflection_container<compile_reflected_class>::print_container(indent + 1);
     compile_reflection_container<compile_reflected_function>::print_container(indent + 1);
@@ -56,7 +47,7 @@ rsl::id_type compile_reflected_class::compute_container_structure_hash() noexcep
     rsl::id_type hash = rsl::internal::hash::default_seed;
 
     this->compile_reflection_container<compile_reflected_class>::sort_container(
-        &compile_reflection_container<compile_reflected_class>::sort_by_offset_comparator);
+        &compile_reflection_container<compile_reflected_class>::sort_by_name_comparator);
     rsl::id_type class_container_hash = this->compile_reflection_container<
         compile_reflected_class>::get_container_hash();
 
