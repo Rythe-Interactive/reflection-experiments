@@ -31,6 +31,12 @@ void compile_reflection_container<T>::verify_typename() const
 }
 
 template<typename T>
+const std::vector<std::unique_ptr<T>>& compile_reflection_container<T>::get_container() const
+{
+    return container;
+}
+
+template<typename T>
 rsl::id_type compile_reflection_container<T>::get_container_hash() const noexcept
 {
     if(container.size() == 0) { return SIZE_MAX; }

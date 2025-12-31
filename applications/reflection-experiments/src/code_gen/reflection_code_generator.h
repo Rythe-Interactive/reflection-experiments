@@ -12,10 +12,23 @@ public:
     reflection_code_generator();
     ~reflection_code_generator();
 
-    void generate_reflected_variable_file(
-        const runtime_reflected_variable& parsed_variable,
-        const std::string&                outFile);
+    void generate_reflected_variable(
+        std::ofstream&                    file,
+        const compile_reflected_variable& variable,
+        const std::string&                parent_name);
 
-    void                       generate_reflected_file(const compile_reflected_file& file);
+    void generate_reflected_function(
+        std::ofstream&                    file,
+        const compile_reflected_function& variable,
+        const std::string&                parent_name);
+
+    void generate_reflected_class(
+        std::ofstream&                 file,
+        const compile_reflected_class& variable,
+        const std::string&             parent_name);
+
+    rsl::dynamic_string generate_reflection_id(reflection_id id, const std::string& owner) const;
+
+    void generate_reflected_file(const compile_reflected_file& file);
     static rsl::dynamic_string get_gen_source_file(rsl::string_view source_location);
 };

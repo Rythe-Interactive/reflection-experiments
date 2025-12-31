@@ -25,6 +25,24 @@ compile_reflected_function& compile_reflected_class::add_function(CXCursor& curs
     return this->compile_reflection_container<compile_reflected_function>::add_element(cursor, parent);
 }
 
+const std::vector<std::unique_ptr<compile_reflected_class>>&
+compile_reflected_class::get_class_container() const
+{
+    return this->compile_reflection_container<compile_reflected_class>::get_container();
+}
+
+const std::vector<std::unique_ptr<compile_reflected_function>>&
+compile_reflected_class::get_function_container() const
+{
+    return this->compile_reflection_container<compile_reflected_function>::get_container();
+}
+
+const std::vector<std::unique_ptr<compile_reflected_variable>>&
+compile_reflected_class::get_variable_container() const
+{
+    return this->compile_reflection_container<compile_reflected_variable>::get_container();
+}
+
 void compile_reflected_class::print(int indent) const
 {
     compile_reflected_element::print(indent + 1);

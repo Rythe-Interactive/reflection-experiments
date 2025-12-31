@@ -1,15 +1,13 @@
 1 From AST (with clang lib) generate:
-generated.cpp
 generated.hpp 
 with proper members
-Have a cash system which will partially generate things
+Add it all to global context and expose it per module.
 
 Having as multiple .cpp and .hpp files does feel significantly better performance wise as it would allow to not recompile everything when something is changed and make it modular. In addition we would be able to remove need for registry if generated.hpp file would hold a reference to metadata. The downside is having a lot of files. BUT THREAAADING CAN BE IMPLEMENTED TO MAKE IT PARALLEL.
 
 Add supported list of attributes to our precompiler step, which will give warning based on if it is in there already or not.
 
-LLVM + clang; consider parsing AST myself vs let clang parse it; 
-
+LLVM + clang; parse AST myself
 
 2 During compilation populate unordered map with type - members
 
@@ -39,3 +37,5 @@ For choices: Hash function, hash structure, compile vs runtime containers
 For choices, where to store runtime reflection data - BSS vs Heap vs Stack
 
 Names are made from recursive parents. No runtime reflected namespaces objects.
+
+Had multiple parsing iterations.

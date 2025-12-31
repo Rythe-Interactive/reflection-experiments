@@ -10,7 +10,7 @@
 struct runtime_reflected_class
 {
 public:
-    runtime_reflected_class(rsl::dynamic_string&& type_spelling, reflection_id&& id);
+    runtime_reflected_class(rsl::dynamic_string&& name, rsl::dynamic_string&& type_spelling, reflection_id&& id);
     runtime_reflected_class(runtime_reflected_class&) = delete;
     runtime_reflected_class(runtime_reflected_class&&) = delete;
     ~runtime_reflected_class();
@@ -21,6 +21,7 @@ public:
     runtime_reflected_class& operator=(const runtime_reflected_class&) = delete;
     runtime_reflected_class& operator=(runtime_reflected_class&&) = delete;
 private:
+    rsl::dynamic_string name;
     rsl::dynamic_string type_spelling;
     reflection_id       id;
 

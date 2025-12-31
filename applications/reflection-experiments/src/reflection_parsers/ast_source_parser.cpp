@@ -27,6 +27,11 @@ void reflection_parsers::ast_source_parser::parse_source_folders(const std::unor
         }
     }
     print_all_files();
+
+    for(auto iterator = all_files.begin(); iterator != all_files.end(); ++iterator)
+    {
+        code_generator.generate_reflected_file(iterator->second);
+    }
 }
 
 void reflection_parsers::ast_source_parser::print_all_files() const

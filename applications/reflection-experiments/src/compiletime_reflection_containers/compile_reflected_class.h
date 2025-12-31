@@ -20,6 +20,13 @@ public:
     compile_reflected_class&    add_class(CXCursor& cursor);
     compile_reflected_variable& add_variable(CXCursor& cursor, CXCursor& parent);
     compile_reflected_function& add_function(CXCursor& cursor, CXCursor& parent);
+
+    [[nodiscard]] const std::vector<std::unique_ptr<compile_reflected_class>>&
+    get_class_container() const;
+    [[nodiscard]] const std::vector<std::unique_ptr<compile_reflected_function>>&
+    get_function_container() const;
+    [[nodiscard]] const std::vector<std::unique_ptr<compile_reflected_variable>>&
+    get_variable_container() const;
     
     void print(int indent) const override;
 private:
