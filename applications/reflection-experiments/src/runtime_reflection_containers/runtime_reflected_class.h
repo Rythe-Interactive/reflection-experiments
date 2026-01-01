@@ -9,7 +9,7 @@ struct runtime_reflected_class
 public:
     runtime_reflected_class(rsl::dynamic_string&& name, rsl::dynamic_string&& type_spelling, reflection_id&& id);
     runtime_reflected_class(runtime_reflected_class&) = delete;
-    runtime_reflected_class(runtime_reflected_class&&) = delete;
+    runtime_reflected_class(runtime_reflected_class&&) = default;
     ~runtime_reflected_class();
 
     bool operator==(const runtime_reflected_class& other) const;

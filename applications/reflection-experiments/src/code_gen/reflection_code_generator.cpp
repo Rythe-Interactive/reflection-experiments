@@ -194,7 +194,7 @@ void reflection_code_generator::generate_reflected_variable(
     const std::string variable_name = "variable_" + std::to_string(variable.id.get_full_hash());
 
     file << "    runtime_reflected_variable " << variable_name << ";\n";
-    file << "    " << generate_reflection_id(variable.id, "variable").data() << ";\n";
+    file << "    " << generate_reflection_id(variable.id, "variable").data();
     file << "    " << variable_name << ".offset = " << variable.offset << ";\n";
     file << "    " << variable_name << ".type_spelling = \"" << variable.type_spelling.data() <<
         "\";\n";
