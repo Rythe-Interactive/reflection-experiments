@@ -27,7 +27,7 @@ public:
         const compile_reflected_class& variable,
         const std::string&             parent_name);
 
-    rsl::dynamic_string generate_reflection_id(reflection_id id, const std::string& owner) const;
+    std::string generate_reflection_id(reflection_id id, const std::string& owner) const;
 
     void generate_reflected_file(const compile_reflected_file& file);
     static rsl::dynamic_string get_gen_source_file(rsl::string_view source_location);

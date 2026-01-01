@@ -4,9 +4,6 @@
 #include "../reflection_id/reflection_id.h"
 #include "rsl/impl/containers/string.hpp"
 
-// In class definition case, its name is its type.
-// Because we are using inheritance, name is its base class property, so cant really change that, unfortunate.
-
 struct runtime_reflected_class
 {
 public:
@@ -20,6 +17,10 @@ public:
 
     runtime_reflected_class& operator=(const runtime_reflected_class&) = delete;
     runtime_reflected_class& operator=(runtime_reflected_class&&) = delete;
+
+    void add_variable(runtime_reflected_variable&& variable);
+    void add_class(runtime_reflected_class&& variable);
+    void add_functions(runtime_reflected_function&& variable);
 private:
     rsl::dynamic_string name;
     rsl::dynamic_string type_spelling;

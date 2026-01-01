@@ -20,3 +20,18 @@ runtime_reflected_class::~runtime_reflected_class() {}
     return !this->operator==(other);
 }
 
+void runtime_reflected_class::add_variable(runtime_reflected_variable&& variable)
+{
+    this->variables.push_back(std::move(variable));
+}
+
+void runtime_reflected_class::add_class(runtime_reflected_class&& variable)
+{
+    this->classes.push_back(std::move(variable));
+}
+
+void runtime_reflected_class::add_functions(runtime_reflected_function&& variable)
+{
+    this->functions.push_back(std::move(variable));
+}
+

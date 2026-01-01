@@ -80,15 +80,14 @@ void reflection_code_generator::generate_reflected_file(const compile_reflected_
     const rsl::string_view    source_location = compile_file.get_source_location();
     const rsl::dynamic_string gen_path = get_gen_source_file(source_location);
     std::ofstream             file(gen_path.data());
-    std::cout << gen_path.data() << std::endl;
-    if(!file.is_open()) { std::cout << "Could not open file " << source_location.data() << " for writing.\n"; }
-
+    if(!file.is_open())
+    {
+        std::cout << "Could not open file " << source_location.data() << " for writing.\n";
+        return;
+    }
     const uint64_t file_hash = compile_file.id.get_full_hash();
 
-    file << "#include <runtime/reflection_registry.h>\n";
-    file << "#include <runtime/reflected_file.h>\n";
-    file << "#include <runtime/reflected_class.h>\n";
-    file << "#include <runtime/reflected_variable.h>\n";
+    file << "#include <runtime_reflection_containers>\n";
     file << "#include <rsl/impl/util/hash.hpp>\n\n";
 
     file << "namespace {\n\n";
@@ -97,14 +96,16 @@ void reflection_code_generator::generate_reflected_file(const compile_reflected_
     file << "{\n";
 
     // Create file
-    file << "    runtime::reflected_file file;\n";
-    file << generate_reflection_id(compile_file.id, "file").data();
-
+    file << "    runtime_reflected_file file;\n";
+    file << "    " << generate_reflection_id(compile_file.id, "file").data() << "\n";
+    
     // Top-level classes
     for(const auto& cls : compile_file.get_class_container())
     {
         generate_reflected_class(file, *cls.get(), "file");
     }
+
+    file << "};\n\n";
 }
 
 rsl::dynamic_string reflection_code_generator::get_gen_source_file(rsl::string_view source_location)
@@ -124,7 +125,7 @@ rsl::dynamic_string reflection_code_generator::get_gen_source_file(rsl::string_v
 
     strcat_s(buffer, "_generated.hpp");
 
-    return rsl::dynamic_string::from_buffer(buffer, std::strlen(buffer));
+    return rsl::dynamic_string::from_buffer(buffer, std::strlen(buffer) + 1);
 }
 
 /*
@@ -190,15 +191,14 @@ void reflection_code_generator::generate_reflected_variable(
     const compile_reflected_variable& variable,
     const std::string&                parent_name)
 {
-    const std::string variable_name = "variable_" + std::string(variable.name.data());
+    const std::string variable_name = "variable_" + std::to_string(variable.id.get_full_hash());
 
-    file << "   runtime::reflected_variable var_" << variable.id.get_name_hash() << ";\n";
-    file << "   " << generate_reflection_id(variable.id, "variable").data() << ";\n";
-    file << "   var_" << variable.id.get_name_hash() << ".offset = " << variable.offset << ";\n";
-    file << "   var_" << variable.id.get_name_hash() << ".type_spelling = \"" << variable.
-                                                                                 type_spelling.
-                                                                                 data() << "\";\n";
-    file << "   " << parent_name << ".add_variable(var_" << variable.id.get_name_hash() << ");\n\n";
+    file << "    runtime_reflected_variable " << variable_name << ";\n";
+    file << "    " << generate_reflection_id(variable.id, "variable").data() << ";\n";
+    file << "    " << variable_name << ".offset = " << variable.offset << ";\n";
+    file << "    " << variable_name << ".type_spelling = \"" << variable.type_spelling.data() <<
+        "\";\n";
+    file << "    " << parent_name << ".add_variable(std::move(" << variable_name << "));\n\n";
 }
 
 void reflection_code_generator::generate_reflected_class(
@@ -206,10 +206,10 @@ void reflection_code_generator::generate_reflected_class(
     const compile_reflected_class& cls,
     const std::string&             parent_name)
 {
-    const std::string class_var = "class_" + std::string(cls.name.data());
+    const std::string class_var = "class_" + std::to_string(cls.id.get_full_hash());
 
-    file << "    runtime::reflected_class " << class_var << ";\n";
-    file << "    " << generate_reflection_id(cls.id, class_var).data() << ";\n";
+    file << "    runtime_reflected_class " << class_var << ";\n";
+    file << "    " << generate_reflection_id(cls.id, class_var).data();
 
     for(const auto& var : cls.get_variable_container())
     {
@@ -224,24 +224,24 @@ void reflection_code_generator::generate_reflected_class(
     file << "    " << parent_name << ".add_class(std::move(" << class_var << "));\n\n";
 }
 
-rsl::dynamic_string reflection_code_generator::generate_reflection_id(
+std::string reflection_code_generator::generate_reflection_id(
     reflection_id      id,
     const std::string& owner_name) const
 {
-    rsl::dynamic_string generate;
+    std::string generate;
 
-    generate += rsl::dynamic_string::from_buffer(owner_name.data(), owner_name.size());
+    generate += owner_name;
     generate += ".id = reflection_id(";
 
-    generate += rsl::to_string(id.get_name_hash());
+    generate += std::to_string(id.get_name_hash());
     generate += ", ";
 
-    generate += rsl::to_string(id.get_structure_hash());
+    generate += std::to_string(id.get_structure_hash());
     generate += ", ";
 
-    generate += rsl::to_string(id.get_full_hash());
-    generate += ");";
-
+    generate += std::to_string(id.get_full_hash());
+    generate += ");\n";
+    
     return generate;
 }
 
