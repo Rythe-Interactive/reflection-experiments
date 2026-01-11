@@ -1,5 +1,7 @@
 #include "runtime_reflected_variable.h"
 
+runtime_reflected_variable::runtime_reflected_variable() {}
+
 runtime_reflected_variable::runtime_reflected_variable(
     rsl::dynamic_string&& name,
     reflection_id&&       id,

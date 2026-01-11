@@ -1,5 +1,7 @@
 #include "runtime_reflected_class.h"
 
+runtime_reflected_class::runtime_reflected_class() {}
+
 runtime_reflected_class::runtime_reflected_class(
     rsl::dynamic_string&& name,
     rsl::dynamic_string&& type_spelling,
@@ -25,13 +27,13 @@ void runtime_reflected_class::add_variable(runtime_reflected_variable&& variable
     this->variables.push_back(std::move(variable));
 }
 
-void runtime_reflected_class::add_class(runtime_reflected_class&& variable)
+void runtime_reflected_class::add_class(runtime_reflected_class&& cls)
 {
-    this->classes.push_back(std::move(variable));
+    this->classes.push_back(std::move(cls));
 }
 
-void runtime_reflected_class::add_functions(runtime_reflected_function&& variable)
+void runtime_reflected_class::add_function(runtime_reflected_function&& function)
 {
-    this->functions.push_back(std::move(variable));
+    this->functions.push_back(std::move(function));
 }
 

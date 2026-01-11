@@ -23,7 +23,8 @@ void reflection_id::set_full_hash(rsl::id_type hash) { full_hash = hash; }
 
 bool reflection_id::operator==(const reflection_id& other) const noexcept
 {
-    return (name_hash == other.name_hash) && (structure_hash == other.structure_hash);
+    return name_hash == other.name_hash && structure_hash == other.structure_hash && full_hash ==
+           other.full_hash;
 }
 
 bool reflection_id::operator!=(const reflection_id& other) const noexcept { return !(*this == other); }

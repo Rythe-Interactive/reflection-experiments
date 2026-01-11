@@ -9,9 +9,10 @@ reflection_parsers::ast_source_parser::ast_source_parser()
 
 reflection_parsers::ast_source_parser::~ast_source_parser() {}
 
-void reflection_parsers::ast_source_parser::parse_source_folders(const std::unordered_set<std::string>& folders)
+void reflection_parsers::ast_source_parser::generate_reflection_files(
+    const std::unordered_set<std::string>& folders)
 {
-    //std::cout << "reflection_parsers::ast_source_parser::parse_source_folders" << std::endl;
+    //std::cout << "reflection_parsers::ast_source_parser::generate_reflection_files" << std::endl;
     index = clang_createIndex(0, 0);
 
     for(auto& folder : folders)
@@ -20,13 +21,20 @@ void reflection_parsers::ast_source_parser::parse_source_folders(const std::unor
         {
             if(!entry.is_regular_file()) { continue; }
             std::filesystem::path path = entry.path();
+            std::string           filename = path.filename().string();
+
+            if(filename.ends_with("_generated.h") || filename.ends_with("_generated.hpp"))
+            {
+                continue;
+            }
+
             if(path.extension() == ".hpp" || path.extension() == ".h")
             {
                 ast_parse_file(path.string(), index);
             }
         }
     }
-    print_all_files();
+    //print_all_files();
 
     for(auto iterator = all_files.begin(); iterator != all_files.end(); ++iterator)
     {

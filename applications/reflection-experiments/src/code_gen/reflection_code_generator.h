@@ -23,9 +23,9 @@ public:
         const std::string&                parent_name);
 
     void generate_reflected_class(
-        std::ofstream&                 file,
-        const compile_reflected_class& variable,
-        const std::string&             parent_name);
+        std::ofstream&                      file,
+        const compile_reflected_class&      variable,
+        [[maybe_unused]] const std::string& parent_name);
 
     std::string generate_reflection_id(reflection_id id, const std::string& owner) const;
 

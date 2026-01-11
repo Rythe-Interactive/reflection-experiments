@@ -19,8 +19,8 @@ public:
     reflection_id(reflection_id&&) = default;
     ~reflection_id() = default;
 
-    reflection_id& operator=(const reflection_id&) = delete;
-    reflection_id& operator=(reflection_id&&) = delete;
+    reflection_id& operator=(const reflection_id&) = default;
+    reflection_id& operator=(reflection_id&&) = default;
 
     static reflection_id null() noexcept;
 
@@ -39,11 +39,25 @@ public:
     
     static rsl::string_view get_hash_value_hex_string(const rsl::id_type& hash);
     static rsl::string_view get_hash_value_decimal_string(const rsl::id_type& hash);
-    
-private:
+
     reflection_id() noexcept;
+private:
 
     rsl::id_type name_hash;
     rsl::id_type structure_hash;
     rsl::id_type full_hash;
 };
+
+// specialize std::hash
+namespace std
+{
+    template<>
+    struct hash<reflection_id>
+    {
+        std::size_t operator()(const reflection_id& id) const noexcept
+        {
+            // Combine the three 64-bit numbers into one hash
+            return id.get_full_hash();
+        }
+    };
+}

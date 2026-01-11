@@ -18,7 +18,7 @@ namespace reflection_parsers
         ast_source_parser();
         ~ast_source_parser();
 
-        void parse_source_folders(const std::unordered_set<std::string>& folders);
+        void generate_reflection_files(const std::unordered_set<std::string>& folders);
 
         void print_all_files() const;
     private:

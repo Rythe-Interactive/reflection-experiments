@@ -3,6 +3,9 @@
 #include <rsl/cli>
 
 #include "reflection_parsers/ast_source_parser.h"
+#include "reflection_context/reflection_context.h"
+#include "reflection_context/reflection_registration_registry.h"
+#include "target/test_generated.hpp"
 
 int main(int, char* argv[])
 {
@@ -19,7 +22,13 @@ int main(int, char* argv[])
 
     auto parser = reflection_parsers::ast_source_parser();
 
-    parser.parse_source_folders(folders);
+    parser.generate_reflection_files(folders);
 
+    register_reflection_file_0();
+    reflection_registration_registry::instance().run_all();
+
+    reflection_context::instance().print_classes();    
+    
+    
     return 0;
 }

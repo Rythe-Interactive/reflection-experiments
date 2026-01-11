@@ -7,6 +7,7 @@
 struct runtime_reflected_variable
 {
 public:
+    runtime_reflected_variable();
     runtime_reflected_variable(
         rsl::dynamic_string&& name,
         reflection_id&&       id,
