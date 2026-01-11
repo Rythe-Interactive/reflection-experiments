@@ -6,9 +6,9 @@ compile_reflected_function::compile_reflected_function(const CXCursor& cursor, c
 {
     CXType      cursorType = clang_getCursorType(cursor);
     CXString    typeSpelling = clang_getTypeSpelling(cursorType);
-    const char* type_spelling = clang_getCString(typeSpelling);
+    const char* type_spelling_cstring = clang_getCString(typeSpelling);
 
-    this->type_spelling = rsl::dynamic_string::from_string_length(type_spelling);
+    this->type_spelling = rsl::dynamic_string::from_string_length(type_spelling_cstring);
     
     clang_disposeString(typeSpelling);
 

@@ -136,11 +136,11 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
 }
 
 // Meant to pass temporary 
-void reflection_parsers::ast_source_parser::ast_parse_file(const std::string&& filePath, CXIndex index)
+void reflection_parsers::ast_source_parser::ast_parse_file(const std::string&& filePath, CXIndex cxIndex)
 {
     std::cout << "Parsing file path: " << filePath << '\n';
     CXTranslationUnit unit = clang_parseTranslationUnit(
-        index,
+        cxIndex,
         filePath.data(),
         nullptr,
         0,
