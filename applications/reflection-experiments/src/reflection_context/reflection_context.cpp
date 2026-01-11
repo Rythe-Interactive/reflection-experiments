@@ -36,7 +36,7 @@ void reflection_context::print_classes() const
             for(const auto& var : cls.variables)
             {
                 std::cout << "    - " << var.type_spelling.data() << " (offset " << var.offset <<
-                    ", ID: " << var.id.get_full_hash() << ")\n";
+                    ", id: " << var.id.get_full_hash() << ")\n";
             }
         }
 
@@ -45,8 +45,8 @@ void reflection_context::print_classes() const
             std::cout << "  Nested Classes:\n";
             for(const auto& nested : cls.classes)
             {
-                std::cout << "    - Nested Class ID: " << nested.id.get_full_hash() << ", Name: " <<
-                    nested.name.data() << "\n";
+                std::cout << "    - Nested Class id: " << nested.id.get_full_hash() <<
+                    ", type spelling: " << nested.type_spelling.data() << "\n";
             }
         }
     }

@@ -23,7 +23,7 @@ int main(int, char* argv[])
     auto parser = reflection_parsers::ast_source_parser();
 
     parser.generate_reflection_files(folders);
-
+    reflection_registration_registry::instance().clear();
     register_reflection_file_0();
     reflection_registration_registry::instance().run_all();
 

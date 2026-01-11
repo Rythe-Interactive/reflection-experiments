@@ -216,7 +216,9 @@ void reflection_code_generator::generate_reflected_class(
 
     file << "    runtime_reflected_class " << class_var << ";\n";
     file << "    " << generate_reflection_id(cls.id, class_var).data();
-
+    file << "    " << class_var << ".type_spelling = rsl::dynamic_string::from_string_length(\"" <<
+        cls.name.data() << "\");\n\n";
+    
     for(const auto& var : cls.get_variable_container())
     {
         generate_reflected_variable(file, *var.get(), class_var);
