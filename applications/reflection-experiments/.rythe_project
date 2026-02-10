@@ -3,14 +3,8 @@ local fs = dofile("filesystem.lua")
 local project = {
     additional_types = { "test" },
     dependencies = { "public rythe/rythe-standard-library", "private third_party/clang-c:header-only", 
-     "private third_party/xxhash"},
+     "private third_party/xxhash", "public rythe/reflection-core"},
     additional_link_targets = { "libclang" },
 }
-
-function project.init(proj, context)
-    local srcDir = fs.sanitize(context.getProjectDir() .. "/src/target/")
-    proj.debug_args = { "--fpath=\"" .. srcDir .. "\"" }
-    return proj
-end
 
 return project

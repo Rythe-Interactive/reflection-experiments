@@ -1,16 +1,16 @@
-class target_class
+class very_cool_target_class
 {
 public:
     int int_variable;
 
-    float very_cool_variable;
+    float variable;
     
     void void_function(int int_parameter);
 
-    class even_cooler_nested_class
+    class nested_class
     {
     public:
-        even_cooler_nested_class() : value(0) {}
+        nested_class() : value(0) {}
 
         void set_value(int v) { value = v; }
 
