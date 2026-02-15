@@ -5,7 +5,7 @@
 #include "impl/reflection_parsers/ast_source_parser.h"
 #include "impl/reflection_context/reflection_context.h"
 #include "impl/reflection_context/reflection_registration_registry.h"
-//#include "target/test_generated.hpp"
+#include "target/test_generated.hpp"
 
 int main(int, char* argv[])
 {
@@ -24,9 +24,9 @@ int main(int, char* argv[])
 
     parser.generate_reflection_files(folders);
     reflection_registration_registry::instance().clear();
-    //register_reflection_file_0();
+    register_reflection_file_0();
     reflection_registration_registry::instance().run_all();
-    // lala
+    //lala
     reflection_context::instance().print_classes();    
     
     

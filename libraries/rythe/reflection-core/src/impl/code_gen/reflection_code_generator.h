@@ -29,6 +29,8 @@ public:
 
     std::string generate_reflection_id(reflection_id id, const std::string& owner) const;
 
-    void generate_reflected_file(const compile_reflected_file& file);
+    void generate_reflected_file(
+        const compile_reflected_file& file,
+        std::string_view              generate_folder);
     static rsl::dynamic_string get_gen_source_file(rsl::string_view source_location);
 };

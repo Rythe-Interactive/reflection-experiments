@@ -2,8 +2,7 @@ local fs = dofile("filesystem.lua")
 
 local project = {
     additional_types = { "test" },
-    dependencies = { "public rythe/rythe-standard-library", "private third_party/clang-c:header-only", 
-     "private third_party/xxhash", "public rythe/reflection-core"},
+    dependencies = { "public rythe/rythe-standard-library", "private third_party/clang-c:header-only", "public rythe/reflection-core"},
     additional_link_targets = { "libclang" },
 }
 

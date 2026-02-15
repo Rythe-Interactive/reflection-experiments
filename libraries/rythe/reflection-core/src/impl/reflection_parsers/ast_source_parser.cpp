@@ -10,7 +10,8 @@ reflection_parsers::ast_source_parser::ast_source_parser()
 reflection_parsers::ast_source_parser::~ast_source_parser() {}
 
 void reflection_parsers::ast_source_parser::generate_reflection_files(
-    const std::unordered_set<std::string>& folders)
+    const std::unordered_set<std::string>& folders,
+    std::string_view                       generate_folder)
 {
     //std::cout << "reflection_parsers::ast_source_parser::generate_reflection_files" << std::endl;
     index = clang_createIndex(0, 0);
@@ -38,7 +39,7 @@ void reflection_parsers::ast_source_parser::generate_reflection_files(
 
     for(auto iterator = all_files.begin(); iterator != all_files.end(); ++iterator)
     {
-        code_generator.generate_reflected_file(iterator->second);
+        code_generator.generate_reflected_file(iterator->second, generate_folder);
     }
 }
 

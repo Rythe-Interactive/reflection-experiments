@@ -74,9 +74,14 @@ reflection_code_generator::reflection_code_generator() {}
 
 reflection_code_generator::~reflection_code_generator() {}
 
-void reflection_code_generator::generate_reflected_file(const compile_reflected_file& compile_file)
+void reflection_code_generator::generate_reflected_file(
+    const compile_reflected_file& compile_file,
+    std::string_view              generate_folder)
 {
-    const rsl::string_view    source_location = compile_file.get_source_location();
+    const rsl::string_view source_location = rsl::string_view::from_buffer(
+        generate_folder.data(),
+        generate_folder.size());
+    
     const rsl::dynamic_string gen_path = get_gen_source_file(source_location);
     std::ofstream             file(gen_path.data());
     if(!file.is_open())
@@ -86,12 +91,11 @@ void reflection_code_generator::generate_reflected_file(const compile_reflected_
     }
     const uint64_t file_hash = compile_file.id.get_full_hash();
 
-    file << "#include \"../runtime_reflection_containers/runtime_reflected_class.h\"\n";
-    file << "#include \"../runtime_reflection_containers/runtime_reflected_function.h\"\n";
-    file << "#include \"../runtime_reflection_containers/runtime_reflected_variable.h\"\n";
-    file << "#include \"../reflection_id/reflection_id.h\"\n";
-    file << "#include \"../reflection_context/reflection_registration_registry.h\"\n";
-    file << "#include \"../reflection_context/reflection_context.h\"\n";
+    file << "#pragma once\n";
+    file << "#include \"runtime_reflection_containers.h\"\n";
+    file << "#include \"impl/reflection_id/reflection_id.h\"\n";
+    file << "#include \"impl/reflection_context/reflection_registration_registry.h\"\n";
+    file << "#include \"impl/reflection_context/reflection_context.h\"\n";
     
     file << "void register_reflection_file_" << file_hash << "()\n";
     file << "{\n";
