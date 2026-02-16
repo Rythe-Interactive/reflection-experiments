@@ -1,4 +1,6 @@
 #include "reflection_code_generator.h"
+
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
@@ -78,26 +80,31 @@ void reflection_code_generator::generate_reflected_file(
     const compile_reflected_file& compile_file,
     std::string_view              generate_folder)
 {
-    const rsl::string_view source_location = rsl::string_view::from_buffer(
-        generate_folder.data(),
-        generate_folder.size());
-    
-    const rsl::dynamic_string gen_path = get_gen_source_file(source_location);
-    std::ofstream             file(gen_path.data());
+    //TODO definitely can optimize this
+    std::filesystem::path generated_path;
+    generated_path = std::filesystem::path(generate_folder) / compile_file.name.data();
+
+    rsl::dynamic_string final = get_gen_source_file(
+        rsl::dynamic_string::from_buffer(
+            generated_path.string().data(),
+            generated_path.string().size()));
+
+    std::cout << final.data() << std::endl;
+    std::ofstream file(final.data());
     if(!file.is_open())
     {
-        std::cout << "Could not open file " << source_location.data() << " for writing.\n";
+        std::cout << "Could not open file " << final.data() << " for writing.\n";
         return;
     }
-    const uint64_t file_hash = compile_file.id.get_full_hash();
-
-    file << "#pragma once\n";
+    
     file << "#include \"runtime_reflection_containers.h\"\n";
     file << "#include \"impl/reflection_id/reflection_id.h\"\n";
     file << "#include \"impl/reflection_context/reflection_registration_registry.h\"\n";
     file << "#include \"impl/reflection_context/reflection_context.h\"\n";
-    
-    file << "void register_reflection_file_" << file_hash << "()\n";
+
+    // Probably should consider different identifier, as name can be repeated in different namespaces.
+    std::string extracted_name = extract_name(compile_file.name.data());
+    file << "void register_reflection_file_" << extracted_name << "()\n";
     file << "{\n";
     
     // Top-level classes
@@ -112,8 +119,8 @@ void reflection_code_generator::generate_reflected_file(
     file << "{\n";
     file << "    reflection_file_registration_helper()\n";
     file << "    {\n";
-    file <<
-        "        reflection_registration_registry::instance().add(&register_reflection_file_0);\n";
+    file << "        reflection_registration_registry::instance().add(&register_reflection_file_" <<
+        extracted_name << ");\n";
     file << "    }\n";
     file << "};\n" << "static reflection_file_registration_helper registration_instance;";
 }
@@ -133,9 +140,21 @@ rsl::dynamic_string reflection_code_generator::get_gen_source_file(rsl::string_v
     char* last_dot = std::strrchr(buffer, '.');
     if(last_dot != nullptr) { *last_dot = '\0'; }
 
-    strcat_s(buffer, "_generated.hpp");
+    strcat_s(buffer, "_generated.cpp");
 
     return rsl::dynamic_string::from_buffer(buffer, std::strlen(buffer) + 1);
+}
+
+std::string reflection_code_generator::extract_name(std::string_view filename)
+{
+    size_t      last_dot_position = filename.rfind('.');
+    std::string file_name;
+    if(last_dot_position != std::string::npos)
+    {
+        file_name = filename.substr(0, last_dot_position);
+    }
+    else { std::cerr << "File name is empty.\n"; }
+    return file_name;
 }
 
 /*

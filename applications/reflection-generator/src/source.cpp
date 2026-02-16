@@ -21,7 +21,7 @@ int main(int, char* argv[])
     for (size_t i = 0; i < cmdl.size(); ++i)
         std::cout << i << ": [" << cmdl[i] << "]\n";
     
-    cmdl("--gpath") >> generate_folder;
+    cmdl("gpath") >> generate_folder;
     std::cout << "lala " << generate_folder << '\n';
     auto parser = reflection_parsers::ast_source_parser();
 

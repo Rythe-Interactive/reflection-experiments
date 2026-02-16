@@ -35,7 +35,6 @@ void reflection_parsers::ast_source_parser::generate_reflection_files(
             }
         }
     }
-    //print_all_files();
 
     for(auto iterator = all_files.begin(); iterator != all_files.end(); ++iterator)
     {

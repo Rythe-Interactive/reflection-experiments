@@ -33,4 +33,6 @@ public:
         const compile_reflected_file& file,
         std::string_view              generate_folder);
     static rsl::dynamic_string get_gen_source_file(rsl::string_view source_location);
+
+    static std::string extract_name(std::string_view name);
 };
