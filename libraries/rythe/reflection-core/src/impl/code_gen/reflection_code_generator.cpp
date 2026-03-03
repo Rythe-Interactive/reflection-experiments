@@ -224,6 +224,8 @@ void reflection_code_generator::generate_reflected_variable(
     const std::string variable_name = "variable_" + std::to_string(variable.id.get_full_hash());
 
     file << "    runtime_reflected_variable " << variable_name << ";\n";
+    file << "    " << variable_name << ".name = rsl::dynamic_string::from_string_length(\"" <<
+        variable.name.data() << "\");\n";
     file << "    " << generate_reflection_id(variable.id, variable_name).data();
     file << "    " << variable_name << ".offset = " << variable.offset << ";\n";
     file << "    " << variable_name << ".type_spelling = " <<
@@ -240,6 +242,9 @@ void reflection_code_generator::generate_reflected_function(
 
     file << "    runtime_reflected_function " << function_name << ";\n";
 
+    file << "    " << function_name << ".name = rsl::dynamic_string::from_string_length(\"" <<
+        function.name.data() << "\");\n";
+    
     file << "    " << generate_reflection_id(function.id, function_name).data();
 
     file << "    " << function_name << ".return_type_spelling = " <<
@@ -285,6 +290,9 @@ void reflection_code_generator::generate_reflected_class(
     const std::string class_var = "class_" + std::to_string(cls.id.get_full_hash());
 
     file << "    runtime_reflected_class " << class_var << ";\n";
+    file << "    " << class_var << ".name = rsl::dynamic_string::from_string_length(\"" << cls.name.
+                                                                                               data()
+        << "\");\n";
     file << "    " << generate_reflection_id(cls.id, class_var).data();
     file << "    " << class_var << ".type_spelling = rsl::dynamic_string::from_string_length(\"" <<
         cls.name.data() << "\");\n\n";

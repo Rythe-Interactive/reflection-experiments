@@ -17,7 +17,6 @@ void reflection_registration_registry::run_all() const
     {
         if(function)
         {
-            std::cout << "lala";
             function();
         }
     }

@@ -22,7 +22,6 @@ int main(int, char* argv[])
         std::cout << i << ": [" << cmdl[i] << "]\n";
     
     cmdl("gpath") >> generate_folder;
-    std::cout << "lala " << generate_folder << '\n';
     auto parser = reflection_parsers::ast_source_parser();
 
     parser.generate_reflection_files(folders, generate_folder);

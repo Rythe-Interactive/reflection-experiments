@@ -25,9 +25,8 @@ void reflection_context::print_classes() const
 
     for(const auto& [id, cls] : classes)
     {
-        std::cout << "- reflection id: " << cls.id.get_full_hash() << ", type spelling: " << cls.
-                                                                                             type_spelling
-                                                                                             .data()
+        std::cout << "- name: " << cls.name.data() << ", reflection id: " << cls.id.get_full_hash()
+            << ", type spelling: " << cls.type_spelling.data()
             << "\n";
 
         if(!cls.variables.empty())
@@ -35,7 +34,8 @@ void reflection_context::print_classes() const
             std::cout << "  Variables:\n";
             for(const auto& var : cls.variables)
             {
-                std::cout << "    - " << var.type_spelling.data() << " (offset " << var.offset <<
+                std::cout << "    - " << var.type_spelling.data() << " " << var.name.data() <<
+                    " (offset " << var.offset <<
                     ", id: " << var.id.get_full_hash() << ")\n";
             }
         }
@@ -45,7 +45,9 @@ void reflection_context::print_classes() const
             std::cout << "  Nested Classes:\n";
             for(const auto& nested : cls.classes)
             {
-                std::cout << "    - Nested Class id: " << nested.id.get_full_hash() <<
+                std::cout << "    - name: " << nested.name.data() << ", id: " << nested.id.
+                                                                                        get_full_hash()
+                    <<
                     ", type spelling: " << nested.type_spelling.data() << "\n";
             }
         }
@@ -55,7 +57,7 @@ void reflection_context::print_classes() const
             std::cout << "  Functions:\n";
             for(const auto& func : cls.functions)
             {
-                std::cout << /*"    - Function: " << func.name.data() <<*/ "    - id: " << id.
+                std::cout << "    - name: " << func.name.data() << ", id: " << id.
                     get_full_hash() << ", return type: " << func.return_type_spelling.data() <<
                     ", const: " << (func.is_const ? "true" : "false") << ", static: " << (
                         func.is_static ? "true" : "false") << "\n";
