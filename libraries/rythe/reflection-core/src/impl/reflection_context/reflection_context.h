@@ -21,6 +21,7 @@ public:
 
     void clear();
     void print_classes() const;
+    void simulate_printing_classes() const;
 private:
     reflection_context() = default;
     ~reflection_context() = default;

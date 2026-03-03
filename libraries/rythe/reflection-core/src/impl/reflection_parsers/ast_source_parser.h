@@ -49,7 +49,7 @@ namespace reflection_parsers
         // However, you can use rsl::dynamic_string&& in order to force the calling code to create a temporary string object.
         // The reason you'd do that is in order to make the caller aware of the allocation that will happen inside the function because
         // you expect the function to be called in a place where allocations are not in the budget.
-        void ast_parse_file(const std::string&& filePath, CXIndex index);
+        void ast_parse_file(const std::string& filePath, CXIndex index);
 
         static std::string_view extract_file_name(const std::string_view filePath);
     };

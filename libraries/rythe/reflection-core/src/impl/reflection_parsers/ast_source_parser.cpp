@@ -82,7 +82,6 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_file(
         }
         case CXCursor_FunctionDecl:
         {
-            std::cout << "Prehistorichey" << std::endl;
             compile_reflected_function& function = parent_file->compile_reflection_container<
                 compile_reflected_function>::add_element(current_cursor, parent_cursor);
             function.set_full_hash();
@@ -126,7 +125,6 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
         }
         case CXCursor_CXXMethod:
         {
-            std::cout << "Prehistorichey" << std::endl;
             compile_reflected_function& function = parent_class->add_function(
                 current_cursor,
                 parent_cursor);
@@ -140,9 +138,11 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
 }
 
 // Meant to pass temporary 
-void reflection_parsers::ast_source_parser::ast_parse_file(const std::string&& filePath, CXIndex cxIndex)
+void reflection_parsers::ast_source_parser::ast_parse_file(
+    const std::string& filePath,
+    CXIndex            cxIndex)
 {
-    std::cout << "Parsing file path: " << filePath << '\n';
+    // << "Parsing file path: " << filePath << '\n';
     CXTranslationUnit unit = clang_parseTranslationUnit(
         cxIndex,
         filePath.data(),

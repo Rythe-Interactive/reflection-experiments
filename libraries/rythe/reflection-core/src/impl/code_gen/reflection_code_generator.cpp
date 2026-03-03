@@ -88,8 +88,7 @@ void reflection_code_generator::generate_reflected_file(
         rsl::dynamic_string::from_buffer(
             generated_path.string().data(),
             generated_path.string().size()));
-
-    std::cout << final.data() << std::endl;
+    
     std::ofstream file(final.data());
     if(!file.is_open())
     {
@@ -111,7 +110,6 @@ void reflection_code_generator::generate_reflected_file(
     for(const auto& cls : compile_file.get_class_container())
     {
         generate_reflected_class(file, *cls.get(), "");
-        std::cout << "cls.get()" << std::endl;
     }
 
     file << "};\n\n";

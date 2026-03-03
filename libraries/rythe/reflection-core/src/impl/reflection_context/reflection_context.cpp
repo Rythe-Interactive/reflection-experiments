@@ -76,3 +76,68 @@ void reflection_context::print_classes() const
         }
     }
 }
+
+template<typename T>
+inline void keep_memory(T* p) { asm volatile("" : : "g"(p) : "memory"); }
+
+void reflection_context::simulate_printing_classes() const
+{
+    for(const auto& [id, cls] : classes)
+    {
+        rsl::id_type classHash = cls.id.get_full_hash();
+        keep_memory(&classHash);
+        keep_memory(cls.name.data());
+        keep_memory(cls.type_spelling.data());
+
+
+        if(!cls.variables.empty())
+        {
+            for(const auto& var : cls.variables)
+            {
+                keep_memory(var.name.data());
+                keep_memory(var.type_spelling.data());
+
+                rsl::size_type varOffset = var.offset;
+                keep_memory(&varOffset);
+
+                rsl::id_type varHash = var.id.get_full_hash();
+                keep_memory(&varHash);
+            }
+        }
+
+        if(!cls.classes.empty())
+        {
+            for(const auto& nested : cls.classes)
+            {
+                keep_memory(nested.name.data());
+                rsl::id_type nestedHash = nested.id.get_full_hash();
+                keep_memory(&nestedHash);
+                keep_memory(nested.type_spelling.data());
+            }
+        }
+
+        if(!cls.functions.empty())
+        {
+            for(const auto& func : cls.functions)
+            {
+                keep_memory(func.name.data());
+                rsl::id_type funcHash = func.id.get_full_hash();
+                keep_memory(&funcHash);
+                keep_memory(func.return_type_spelling.data());
+
+                keep_memory(&func.is_const);
+                keep_memory(&func.is_static);
+
+                if(!func.parameter_names.empty())
+                {
+                    for(rsl::size_type i = 0; i < func.parameter_names.size(); ++i)
+                    {
+                        keep_memory(func.parameter_names[i].data());
+                        keep_memory(func.parameter_types_spelling[i].data());
+                    }
+                }
+            }
+        }
+    }
+}
+
