@@ -111,6 +111,7 @@ void reflection_code_generator::generate_reflected_file(
     for(const auto& cls : compile_file.get_class_container())
     {
         generate_reflected_class(file, *cls.get(), "");
+        std::cout << "cls.get()" << std::endl;
     }
 
     file << "};\n\n";
@@ -230,6 +231,52 @@ void reflection_code_generator::generate_reflected_variable(
     file << "    " << parent_name << ".add_variable(std::move(" << variable_name << "));\n\n";
 }
 
+void reflection_code_generator::generate_reflected_function(
+    std::ofstream&                    file,
+    const compile_reflected_function& function,
+    const std::string&                parent_name)
+{
+    const std::string function_name = "function_" + std::to_string(function.id.get_full_hash());
+
+    file << "    runtime_reflected_function " << function_name << ";\n";
+
+    file << "    " << generate_reflection_id(function.id, function_name).data();
+
+    file << "    " << function_name << ".return_type_spelling = " <<
+        "rsl::dynamic_string::from_string_length(\"" << function.return_type_spelling.data() <<
+        "\");\n";
+
+    for(rsl::size_type i = 0; i < function.parameter_type_spellings.size(); ++i)
+    {
+        file << "    " << function_name << ".parameter_types_spelling.push_back(" <<
+            "rsl::dynamic_string::from_string_length(\"" << function.parameter_type_spellings[i].
+            data() << "\"));\n";
+    }
+
+    for(rsl::size_type i = 0; i < function.parameter_types.size(); ++i)
+    {
+        const auto& param_id = function.parameter_types[i];
+        file << "    " << function_name << ".parameter_types.push_back(" << "reflection_id(" <<
+            param_id.get_name_hash() << "ULL, " << param_id.get_structure_hash() << "ULL, " <<
+            param_id.get_full_hash() << "ULL));\n";
+    }
+
+    for(rsl::size_type i = 0; i < function.parameter_names.size(); ++i)
+    {
+        file << "    " << function_name << ".parameter_names.push_back(" <<
+            "rsl::dynamic_string::from_string_length(\"" << function.parameter_names[i].data() <<
+            "\"));\n";
+    }
+
+    file << "    " << function_name << ".is_const = " << (function.is_const ? "true" : "false") <<
+        ";\n";
+    file << "    " << function_name << ".is_static = " << (function.is_static ? "true" : "false") <<
+        ";\n";
+
+    file << "    " << parent_name << ".add_function(std::move(" << function_name << "));\n\n";
+}
+
+
 void reflection_code_generator::generate_reflected_class(
     std::ofstream&                 file,
     const compile_reflected_class& cls,
@@ -247,6 +294,11 @@ void reflection_code_generator::generate_reflected_class(
         generate_reflected_variable(file, *var.get(), class_var);
     }
 
+    for(const auto& func : cls.get_function_container())
+    {
+        generate_reflected_function(file, *func.get(), class_var);
+    }
+   
     for(const auto& nested : cls.get_class_container())
     {
         generate_reflected_class(file, *nested.get(), class_var);

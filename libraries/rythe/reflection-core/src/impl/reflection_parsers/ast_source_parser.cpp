@@ -13,8 +13,6 @@ void reflection_parsers::ast_source_parser::generate_reflection_files(
     const std::unordered_set<std::string>& folders,
     std::string_view                       generate_folder)
 {
-    //std::cout << "reflection_parsers::ast_source_parser::generate_reflection_files" << std::endl;
-    index = clang_createIndex(0, 0);
 
     for(auto& folder : folders)
     {
@@ -76,6 +74,7 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_file(
         }
         case CXCursor_FieldDecl:
         {
+            
             compile_reflected_variable& variable = parent_file->compile_reflection_container<
                 compile_reflected_variable>::add_element(current_cursor, parent_cursor);
             variable.set_full_hash();
@@ -83,9 +82,10 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_file(
         }
         case CXCursor_FunctionDecl:
         {
-            /*compile_reflected_function& function = parent_file->compile_reflection_container<
+            std::cout << "Prehistorichey" << std::endl;
+            compile_reflected_function& function = parent_file->compile_reflection_container<
                 compile_reflected_function>::add_element(current_cursor, parent_cursor);
-            function.set_full_hash();*/
+            function.set_full_hash();
             break;
         }
         default:
@@ -117,16 +117,20 @@ CXChildVisitResult reflection_parsers::ast_source_parser::visitor_from_class(
         }
         case CXCursor_FieldDecl:
         {
-            compile_reflected_variable& variable = parent_class->compile_reflection_container<
-                compile_reflected_variable>::add_element(
+            compile_reflected_variable& variable = parent_class->add_variable(
                 current_cursor,
                 parent_cursor);
             variable.set_full_hash();
+            
             break;
         }
-        case CXCursor_FunctionDecl:
+        case CXCursor_CXXMethod:
         {
-            std::cout << "Indeed a function" << '\n';
+            std::cout << "Prehistorichey" << std::endl;
+            compile_reflected_function& function = parent_class->add_function(
+                current_cursor,
+                parent_cursor);
+            function.set_full_hash();
             break;
         }
         default:

@@ -49,5 +49,28 @@ void reflection_context::print_classes() const
                     ", type spelling: " << nested.type_spelling.data() << "\n";
             }
         }
+
+        if(!cls.functions.empty())
+        {
+            std::cout << "  Functions:\n";
+            for(const auto& func : cls.functions)
+            {
+                std::cout << /*"    - Function: " << func.name.data() <<*/ "    - id: " << id.
+                    get_full_hash() << ", return type: " << func.return_type_spelling.data() <<
+                    ", const: " << (func.is_const ? "true" : "false") << ", static: " << (
+                        func.is_static ? "true" : "false") << "\n";
+
+                if(!func.parameter_names.empty())
+                {
+                    std::cout << "    parameters:\n";
+
+                    for(rsl::size_type i = 0; i < func.parameter_names.size(); ++i)
+                    {
+                        std::cout << "      - " << func.parameter_types_spelling[i].data() << " " <<
+                            func.parameter_names[i].data() << "\n";
+                    }
+                }
+            }
+        }
     }
 }
