@@ -1,6 +1,6 @@
 #pragma once
 
-class very_cool_target_class
+class very_cool_target_class2
 {
 public:
     int int_variable;
@@ -9,7 +9,7 @@ public:
 
     void void_function(int int_parameter);
 
-    class nested_class
+    class nested_class2
     {
     public:
         nested_class() : value(0) {}

@@ -1,6 +1,6 @@
 #pragma once
 
-class very_cool_target_class1
+class very_cool_target_class5
 {
 public:
     int int_variable;
@@ -9,7 +9,7 @@ public:
 
     void void_function(int int_parameter);
 
-    class nested_class1
+    class nested_class5
     {
     public:
         nested_class() : value(0) {}
@@ -24,7 +24,7 @@ private:
     char char_variable;
 };
 
-class target_class1
+class target_class25
 {
 public:
     int int_variable2;

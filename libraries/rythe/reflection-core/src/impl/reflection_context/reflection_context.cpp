@@ -78,7 +78,7 @@ void reflection_context::print_classes() const
 }
 
 template<typename T>
-inline void keep_memory(T* p) { asm volatile("" : : "g"(p) : "memory"); }
+void keep_memory(T* p) { asm volatile("" : : "g"(p) : "memory"); }
 
 void reflection_context::simulate_printing_classes() const
 {

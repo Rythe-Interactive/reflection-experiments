@@ -4,31 +4,31 @@
 #include "impl/reflection_context/reflection_context.h"
 void register_reflection_file_test1()
 {
-    runtime_reflected_class class_12185981292946708894;
-    class_12185981292946708894.name = rsl::dynamic_string::from_string_length("very_cool_target_class");
-    class_12185981292946708894.id = reflection_id(1644627251862529318ULL, 8049723318310723937ULL, 12185981292946708894ULL);
-    class_12185981292946708894.type_spelling = rsl::dynamic_string::from_string_length("very_cool_target_class");
+    runtime_reflected_class class_13524940889950815692;
+    class_13524940889950815692.name = rsl::dynamic_string::from_string_length("very_cool_target_class1");
+    class_13524940889950815692.id = reflection_id(15734190530540922736ULL, 3676408051602900246ULL, 13524940889950815692ULL);
+    class_13524940889950815692.type_spelling = rsl::dynamic_string::from_string_length("very_cool_target_class1");
 
     runtime_reflected_variable variable_6501503083828029313;
     variable_6501503083828029313.name = rsl::dynamic_string::from_string_length("int_variable");
     variable_6501503083828029313.id = reflection_id(10933754376540684078ULL, 16350452351519940193ULL, 6501503083828029313ULL);
     variable_6501503083828029313.offset = 0;
     variable_6501503083828029313.type_spelling = rsl::dynamic_string::from_string_length("int");
-    class_12185981292946708894.add_variable(std::move(variable_6501503083828029313));
+    class_13524940889950815692.add_variable(std::move(variable_6501503083828029313));
 
     runtime_reflected_variable variable_126163732700301715;
     variable_126163732700301715.name = rsl::dynamic_string::from_string_length("variable");
     variable_126163732700301715.id = reflection_id(5770744143431503129ULL, 12913254394975708779ULL, 126163732700301715ULL);
     variable_126163732700301715.offset = 4;
     variable_126163732700301715.type_spelling = rsl::dynamic_string::from_string_length("float");
-    class_12185981292946708894.add_variable(std::move(variable_126163732700301715));
+    class_13524940889950815692.add_variable(std::move(variable_126163732700301715));
 
     runtime_reflected_variable variable_17337086075296791468;
     variable_17337086075296791468.name = rsl::dynamic_string::from_string_length("char_variable");
     variable_17337086075296791468.id = reflection_id(15779825311949492597ULL, 9221959329564397894ULL, 17337086075296791468ULL);
     variable_17337086075296791468.offset = 8;
     variable_17337086075296791468.type_spelling = rsl::dynamic_string::from_string_length("char");
-    class_12185981292946708894.add_variable(std::move(variable_17337086075296791468));
+    class_13524940889950815692.add_variable(std::move(variable_17337086075296791468));
 
     runtime_reflected_function function_11759744666720004420;
     function_11759744666720004420.name = rsl::dynamic_string::from_string_length("void_function");
@@ -38,19 +38,19 @@ void register_reflection_file_test1()
     function_11759744666720004420.parameter_names.push_back(rsl::dynamic_string::from_string_length("int_parameter"));
     function_11759744666720004420.is_const = false;
     function_11759744666720004420.is_static = false;
-    class_12185981292946708894.add_function(std::move(function_11759744666720004420));
+    class_13524940889950815692.add_function(std::move(function_11759744666720004420));
 
-    runtime_reflected_class class_3418243056281993429;
-    class_3418243056281993429.name = rsl::dynamic_string::from_string_length("nested_class");
-    class_3418243056281993429.id = reflection_id(8627741348740311923ULL, 3650646402339660163ULL, 3418243056281993429ULL);
-    class_3418243056281993429.type_spelling = rsl::dynamic_string::from_string_length("nested_class");
+    runtime_reflected_class class_3838763886465758322;
+    class_3838763886465758322.name = rsl::dynamic_string::from_string_length("nested_class1");
+    class_3838763886465758322.id = reflection_id(10369694553870464195ULL, 7743830921338232219ULL, 3838763886465758322ULL);
+    class_3838763886465758322.type_spelling = rsl::dynamic_string::from_string_length("nested_class1");
 
     runtime_reflected_variable variable_9809713342160364025;
     variable_9809713342160364025.name = rsl::dynamic_string::from_string_length("value");
     variable_9809713342160364025.id = reflection_id(785375445157317512ULL, 16350452351519940193ULL, 9809713342160364025ULL);
     variable_9809713342160364025.offset = 0;
     variable_9809713342160364025.type_spelling = rsl::dynamic_string::from_string_length("int");
-    class_3418243056281993429.add_variable(std::move(variable_9809713342160364025));
+    class_3838763886465758322.add_variable(std::move(variable_9809713342160364025));
 
     runtime_reflected_function function_8326206098713976876;
     function_8326206098713976876.name = rsl::dynamic_string::from_string_length("get_value");
@@ -58,7 +58,15 @@ void register_reflection_file_test1()
     function_8326206098713976876.return_type_spelling = rsl::dynamic_string::from_string_length("int");
     function_8326206098713976876.is_const = true;
     function_8326206098713976876.is_static = false;
-    class_3418243056281993429.add_function(std::move(function_8326206098713976876));
+    class_3838763886465758322.add_function(std::move(function_8326206098713976876));
+
+    runtime_reflected_function function_3472948984907647894;
+    function_3472948984907647894.name = rsl::dynamic_string::from_string_length("nested_class");
+    function_3472948984907647894.id = reflection_id(8627741348740311923ULL, 1911340477269032797ULL, 3472948984907647894ULL);
+    function_3472948984907647894.return_type_spelling = rsl::dynamic_string::from_string_length("int");
+    function_3472948984907647894.is_const = false;
+    function_3472948984907647894.is_static = false;
+    class_3838763886465758322.add_function(std::move(function_3472948984907647894));
 
     runtime_reflected_function function_15519012992129584017;
     function_15519012992129584017.name = rsl::dynamic_string::from_string_length("set_value");
@@ -68,30 +76,30 @@ void register_reflection_file_test1()
     function_15519012992129584017.parameter_names.push_back(rsl::dynamic_string::from_string_length("v"));
     function_15519012992129584017.is_const = false;
     function_15519012992129584017.is_static = false;
-    class_3418243056281993429.add_function(std::move(function_15519012992129584017));
+    class_3838763886465758322.add_function(std::move(function_15519012992129584017));
 
-    class_12185981292946708894.add_class(std::move(class_3418243056281993429));
+    class_13524940889950815692.add_class(std::move(class_3838763886465758322));
 
-    reflection_context::instance().add_class(std::move(class_12185981292946708894));
+    reflection_context::instance().add_class(std::move(class_13524940889950815692));
 
-    runtime_reflected_class class_1446399551175376458;
-    class_1446399551175376458.name = rsl::dynamic_string::from_string_length("target_class2");
-    class_1446399551175376458.id = reflection_id(14404923345981690111ULL, 529573297870223312ULL, 1446399551175376458ULL);
-    class_1446399551175376458.type_spelling = rsl::dynamic_string::from_string_length("target_class2");
+    runtime_reflected_class class_7815435534678921506;
+    class_7815435534678921506.name = rsl::dynamic_string::from_string_length("target_class1");
+    class_7815435534678921506.id = reflection_id(7715218180899384789ULL, 529573297870223312ULL, 7815435534678921506ULL);
+    class_7815435534678921506.type_spelling = rsl::dynamic_string::from_string_length("target_class1");
 
     runtime_reflected_variable variable_13153249853553726320;
     variable_13153249853553726320.name = rsl::dynamic_string::from_string_length("int_variable2");
     variable_13153249853553726320.id = reflection_id(4281340778281841492ULL, 16350452351519940193ULL, 13153249853553726320ULL);
     variable_13153249853553726320.offset = 0;
     variable_13153249853553726320.type_spelling = rsl::dynamic_string::from_string_length("int");
-    class_1446399551175376458.add_variable(std::move(variable_13153249853553726320));
+    class_7815435534678921506.add_variable(std::move(variable_13153249853553726320));
 
     runtime_reflected_variable variable_6526241590453974317;
     variable_6526241590453974317.name = rsl::dynamic_string::from_string_length("char_variable2");
     variable_6526241590453974317.id = reflection_id(10234543199726084352ULL, 9221959329564397894ULL, 6526241590453974317ULL);
     variable_6526241590453974317.offset = 4;
     variable_6526241590453974317.type_spelling = rsl::dynamic_string::from_string_length("char");
-    class_1446399551175376458.add_variable(std::move(variable_6526241590453974317));
+    class_7815435534678921506.add_variable(std::move(variable_6526241590453974317));
 
     runtime_reflected_function function_14922869285292655127;
     function_14922869285292655127.name = rsl::dynamic_string::from_string_length("void_function2");
@@ -101,9 +109,9 @@ void register_reflection_file_test1()
     function_14922869285292655127.parameter_names.push_back(rsl::dynamic_string::from_string_length("int_parameter"));
     function_14922869285292655127.is_const = false;
     function_14922869285292655127.is_static = true;
-    class_1446399551175376458.add_function(std::move(function_14922869285292655127));
+    class_7815435534678921506.add_function(std::move(function_14922869285292655127));
 
-    reflection_context::instance().add_class(std::move(class_1446399551175376458));
+    reflection_context::instance().add_class(std::move(class_7815435534678921506));
 
 };
 
