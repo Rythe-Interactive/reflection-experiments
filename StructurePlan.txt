@@ -1,10 +1,13 @@
 1 From AST (with clang lib) generate:
-generated.cpp
 generated.hpp 
 with proper members
-Have a cash system which will partially generate things
+Add it all to global context and expose it per module.
 
 Having as multiple .cpp and .hpp files does feel significantly better performance wise as it would allow to not recompile everything when something is changed and make it modular. In addition we would be able to remove need for registry if generated.hpp file would hold a reference to metadata. The downside is having a lot of files. BUT THREAAADING CAN BE IMPLEMENTED TO MAKE IT PARALLEL.
+
+Add supported list of attributes to our precompiler step, which will give warning based on if it is in there already or not.
+
+LLVM + clang; parse AST myself
 
 2 During compilation populate unordered map with type - members
 
@@ -16,6 +19,7 @@ Different types and info we need to keep track of:
 	4 Functions: -//-, const, static, virtual and co, pointer to function, 
 	5 Template instances: our concept thing, member functions and variables, allignment, size, name with parameters, 
 	6 Enums: underlying type, scoped?, values
+	7 unions?
 
 	
 If we implement inheritance reflected_member - we will incur 8*virtual_func_num hidden bytes
@@ -25,3 +29,13 @@ Need to figure out which modifiers exactly can be used in the future.
 Need to add a way to manually add reflections.
 
 buffer_string,dynamic string
+
+Need to include namespace into strings
+
+For choices: Hash function, hash structure, compile vs runtime containers
+
+For choices, where to store runtime reflection data - BSS vs Heap vs Stack
+
+Names are made from recursive parents. No runtime reflected namespaces objects.
+
+Had multiple parsing iterations.
