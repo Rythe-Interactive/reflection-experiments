@@ -4,8 +4,8 @@
 #include "rsl/impl/util/primitives.hpp"
 TEST_CASE("Measure single generation time")
 {
-    std::unordered_set<std::string> folders;
-    folders.insert(
+    rsl::dynamic_array<std::string> folders;
+    folders.emplace_back(
         "D:/MyProjects/reflection-experiments/applications/reflection-generator/tests/source_folders/single_source_file");
     std::string generate_folder =
         "D:/MyProjects/reflection-experiments/applications/reflection-experiments/tests/generated_folders/single_generated_file";

@@ -1,4 +1,5 @@
 #pragma once
+#include <span>
 template<typename T>
 T& compile_reflection_container<T>::add_element(const CXCursor& cursor)
 {
@@ -31,7 +32,7 @@ void compile_reflection_container<T>::verify_typename() const
 }
 
 template<typename T>
-const std::vector<std::unique_ptr<T>>& compile_reflection_container<T>::get_container() const
+const std::span<const std::unique_ptr<T>> compile_reflection_container<T>::get_container() const
 {
     return container;
 }
@@ -67,8 +68,8 @@ bool compile_reflection_container<T>::sort_by_name_comparator(const std::unique_
 
     for(std::size_t i = 0; i < min_length; ++i)
     {
-        if(a_string[i] < b_string[i]) { return true; }
-        if(a_string[i] > b_string[i]) { return false; }
+        if(a_string[i] != b_string[i]) { return a_string[i] < b_string[i]; }
+        if(a_string[i] != b_string[i]) { return a_string[i] > b_string[i]; }
     }
     return a_string.size() < b_string.size();
 }

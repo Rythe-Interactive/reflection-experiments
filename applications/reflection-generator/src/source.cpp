@@ -8,18 +8,19 @@ int main(int, char* argv[])
 {
     rsl::cli_parser cmdl(argv);
 
-    // any particular reason for unordered_set?
-    std::unordered_set<std::string> folders;
-    std::string generate_folder;
+    rsl::dynamic_array<std::string> folders;
+    std::string                     generate_folder;
     
     for(auto& param : cmdl.params("fpath"))
     {
         std::cout << '\t' << param.first << " : " << param.second << '\n';
-        folders.insert(param.second);
+        folders.emplace_back(param.second);
     }
 
     for (size_t i = 0; i < cmdl.size(); ++i)
+    {
         std::cout << i << ": [" << cmdl[i] << "]\n";
+    }
     
     cmdl("gpath") >> generate_folder;
     auto parser = reflection_parsers::ast_source_parser();

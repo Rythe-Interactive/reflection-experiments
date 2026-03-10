@@ -15,19 +15,19 @@ compile_reflected_file::~compile_reflected_file() {}
 
 rsl::string_view compile_reflected_file::get_source_location() const { return source_location; }
 
-const std::vector<std::unique_ptr<compile_reflected_class>>&
+const std::span<const std::unique_ptr<compile_reflected_class>>
 compile_reflected_file::get_class_container() const
 {
     return this->compile_reflection_container<compile_reflected_class>::get_container();
 }
 
-const std::vector<std::unique_ptr<compile_reflected_function>>&
+const std::span<const std::unique_ptr<compile_reflected_function>>
 compile_reflected_file::get_function_container() const
 {
     return this->compile_reflection_container<compile_reflected_function>::get_container();
 }
 
-const std::vector<std::unique_ptr<compile_reflected_variable>>&
+const std::span<const std::unique_ptr<compile_reflected_variable>>
 compile_reflected_file::get_variable_container() const
 {
     return this->compile_reflection_container<compile_reflected_variable>::get_container();

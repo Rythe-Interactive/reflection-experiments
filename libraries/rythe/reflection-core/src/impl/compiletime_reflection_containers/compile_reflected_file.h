@@ -17,11 +17,11 @@ public:
     compile_reflected_file(compile_reflected_file&& other) noexcept = default;
     ~compile_reflected_file();
 
-    [[nodiscard]] const std::vector<std::unique_ptr<compile_reflected_class>>&
+    [[nodiscard]] const std::span<const std::unique_ptr<compile_reflected_class>>
     get_class_container() const;
-    [[nodiscard]] const std::vector<std::unique_ptr<compile_reflected_function>>&
+    [[nodiscard]] const std::span<const std::unique_ptr<compile_reflected_function>>
     get_function_container() const;
-    [[nodiscard]] const std::vector<std::unique_ptr<compile_reflected_variable>>&
+    [[nodiscard]] const std::span<const std::unique_ptr<compile_reflected_variable>>
     get_variable_container() const;
     
     

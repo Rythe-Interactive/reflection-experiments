@@ -10,7 +10,7 @@ reflection_parsers::ast_source_parser::ast_source_parser()
 reflection_parsers::ast_source_parser::~ast_source_parser() {}
 
 void reflection_parsers::ast_source_parser::generate_reflection_files(
-    const std::unordered_set<std::string>& folders,
+    const rsl::dynamic_array<std::string>& folders,
     std::string_view                       generate_folder)
 {
 

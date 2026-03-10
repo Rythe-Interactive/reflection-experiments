@@ -22,7 +22,7 @@ compile_reflected_variable::compile_reflected_variable(
     rsl::dynamic_string name,
     reflection_id       type,
     rsl::size_type      offset)
-    : compile_reflected_element(name)
+    : compile_reflected_element(std::move(name))
   , offset(offset) { if(type.get_name_hash()) {} }
 
 compile_reflected_variable::~compile_reflected_variable() {}

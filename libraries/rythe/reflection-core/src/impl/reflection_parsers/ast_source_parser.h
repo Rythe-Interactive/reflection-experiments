@@ -19,7 +19,7 @@ namespace reflection_parsers
         ~ast_source_parser();
 
         void generate_reflection_files(
-            const std::unordered_set<std::string>& folders,
+            const rsl::dynamic_array<std::string>& folders,
             std::string_view                       generate_folder);
 
         void print_all_files() const;

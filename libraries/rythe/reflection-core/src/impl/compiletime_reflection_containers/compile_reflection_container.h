@@ -5,6 +5,7 @@
 #include "clang-c/Index.h"
 #include "compile_reflected_element.h"
 #include <iostream>
+#include <span>
 
 template<typename T>
 class compile_reflection_container
@@ -21,7 +22,7 @@ public:
 
     rsl::id_type get_container_hash() const noexcept;
 
-    [[nodiscard]] const std::vector<std::unique_ptr<T>>& get_container() const;
+    [[nodiscard]] const std::span<const std::unique_ptr<T>> get_container() const;
     
 protected:
     std::vector<std::unique_ptr<T>> container;

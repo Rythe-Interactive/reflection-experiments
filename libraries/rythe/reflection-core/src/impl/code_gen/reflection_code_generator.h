@@ -15,17 +15,17 @@ public:
     void generate_reflected_variable(
         std::ofstream&                    file,
         const compile_reflected_variable& variable,
-        const std::string&                parent_name);
+        std::string_view                  parent_name) const;
 
     void generate_reflected_function(
         std::ofstream&                    file,
         const compile_reflected_function& variable,
-        const std::string&                parent_name);
+        std::string_view                  parent_name) const;
 
     void generate_reflected_class(
-        std::ofstream&                      file,
-        const compile_reflected_class&      variable,
-        [[maybe_unused]] const std::string& parent_name);
+        std::ofstream&                    file,
+        const compile_reflected_class&    variable,
+        [[maybe_unused]] std::string_view parent_name);
 
     std::string generate_reflection_id(reflection_id id, const std::string& owner) const;
 

@@ -81,8 +81,8 @@ void reflection_code_generator::generate_reflected_file(
     std::string_view              generate_folder)
 {
     //TODO definitely can optimize this
-    std::filesystem::path generated_path;
-    generated_path = std::filesystem::path(generate_folder) / compile_file.name.data();
+    std::filesystem::path generated_path =
+        std::filesystem::path(generate_folder) / compile_file.name.data();
 
     rsl::dynamic_string final = get_gen_source_file(
         rsl::dynamic_string::from_buffer(
@@ -95,11 +95,11 @@ void reflection_code_generator::generate_reflected_file(
         std::cout << "Could not open file " << final.data() << " for writing.\n";
         return;
     }
-    
-    file << "#include \"runtime_reflection_containers.h\"\n";
-    file << "#include \"impl/reflection_id/reflection_id.h\"\n";
-    file << "#include \"impl/reflection_context/reflection_registration_registry.h\"\n";
-    file << "#include \"impl/reflection_context/reflection_context.h\"\n";
+
+    file << "#include \"runtime_reflection_containers.h\"\n"
+        "#include \"impl/reflection_id/reflection_id.h\"\n"
+        "#include \"impl/reflection_context/reflection_registration_registry.h\"\n"
+        "#include \"impl/reflection_context/reflection_context.h\"\n";
 
     // Probably should consider different identifier, as name can be repeated in different namespaces.
     std::string extracted_name = extract_name(compile_file.name.data());
@@ -112,16 +112,11 @@ void reflection_code_generator::generate_reflected_file(
         generate_reflected_class(file, *cls.get(), "");
     }
 
-    file << "};\n\n";
-
-    file << "struct reflection_file_registration_helper\n";
-    file << "{\n";
-    file << "    reflection_file_registration_helper()\n";
-    file << "    {\n";
-    file << "        reflection_registration_registry::instance().add(&register_reflection_file_" <<
-        extracted_name << ");\n";
-    file << "    }\n";
-    file << "};\n" << "static reflection_file_registration_helper registration_instance;";
+    file << "};\n\n" "struct reflection_file_registration_helper\n" "{\n"
+        "    reflection_file_registration_helper()\n" "    {\n"
+        "        reflection_registration_registry::instance().add(&register_reflection_file_";
+    file << extracted_name << ");\n" "    }\n" "};\n"
+        "static reflection_file_registration_helper registration_instance;";
 }
 
 rsl::dynamic_string reflection_code_generator::get_gen_source_file(rsl::string_view source_location)
@@ -217,7 +212,7 @@ rsl::dynamic_string reflection_code_generator::generate_variable(rythe::reflecti
 void reflection_code_generator::generate_reflected_variable(
     std::ofstream&                    file,
     const compile_reflected_variable& variable,
-    const std::string&                parent_name)
+    std::string_view                  parent_name) const
 {
     const std::string variable_name = "variable_" + std::to_string(variable.id.get_full_hash());
 
@@ -226,33 +221,33 @@ void reflection_code_generator::generate_reflected_variable(
         variable.name.data() << "\");\n";
     file << "    " << generate_reflection_id(variable.id, variable_name).data();
     file << "    " << variable_name << ".offset = " << variable.offset << ";\n";
-    file << "    " << variable_name << ".type_spelling = " <<
-        "rsl::dynamic_string::from_string_length(\"" << variable.type_spelling.data() << "\");\n";
+    file << "    " << variable_name << ".type_spelling = " << "rsl::dynamic_string::from_array(\""
+        << variable.type_spelling.data() << "\");\n";
     file << "    " << parent_name << ".add_variable(std::move(" << variable_name << "));\n\n";
 }
 
 void reflection_code_generator::generate_reflected_function(
     std::ofstream&                    file,
     const compile_reflected_function& function,
-    const std::string&                parent_name)
+    std::string_view                  parent_name) const
 {
     const std::string function_name = "function_" + std::to_string(function.id.get_full_hash());
 
     file << "    runtime_reflected_function " << function_name << ";\n";
 
-    file << "    " << function_name << ".name = rsl::dynamic_string::from_string_length(\"" <<
+    file << "    " << function_name << ".name = rsl::dynamic_string::from_array(\"" <<
         function.name.data() << "\");\n";
     
     file << "    " << generate_reflection_id(function.id, function_name).data();
 
     file << "    " << function_name << ".return_type_spelling = " <<
-        "rsl::dynamic_string::from_string_length(\"" << function.return_type_spelling.data() <<
+        "rsl::dynamic_string::from_array(\"" << function.return_type_spelling.data() <<
         "\");\n";
 
     for(rsl::size_type i = 0; i < function.parameter_type_spellings.size(); ++i)
     {
         file << "    " << function_name << ".parameter_types_spelling.push_back(" <<
-            "rsl::dynamic_string::from_string_length(\"" << function.parameter_type_spellings[i].
+            "rsl::dynamic_string::from_array(\"" << function.parameter_type_spellings[i].
             data() << "\"));\n";
     }
 
@@ -267,7 +262,7 @@ void reflection_code_generator::generate_reflected_function(
     for(rsl::size_type i = 0; i < function.parameter_names.size(); ++i)
     {
         file << "    " << function_name << ".parameter_names.push_back(" <<
-            "rsl::dynamic_string::from_string_length(\"" << function.parameter_names[i].data() <<
+            "rsl::dynamic_string::from_array(\"" << function.parameter_names[i].data() <<
             "\"));\n";
     }
 
@@ -283,7 +278,7 @@ void reflection_code_generator::generate_reflected_function(
 void reflection_code_generator::generate_reflected_class(
     std::ofstream&                 file,
     const compile_reflected_class& cls,
-    const std::string&             parent_name)
+    std::string_view               parent_name)
 {
     const std::string class_var = "class_" + std::to_string(cls.id.get_full_hash());
 
@@ -292,7 +287,7 @@ void reflection_code_generator::generate_reflected_class(
                                                                                                data()
         << "\");\n";
     file << "    " << generate_reflection_id(cls.id, class_var).data();
-    file << "    " << class_var << ".type_spelling = rsl::dynamic_string::from_string_length(\"" <<
+    file << "    " << class_var << ".type_spelling = rsl::dynamic_string::from_array(\"" <<
         cls.name.data() << "\");\n\n";
     
     for(const auto& var : cls.get_variable_container())
